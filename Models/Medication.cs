@@ -7,8 +7,8 @@ namespace OncoTrack.Models
 {
     public class Medication
     {
-        public int MedicationId { get; set; }
-        public int PatientId { get; set; }
+        public string MedicationId { get; set; }
+        public string PatientId { get; set; }
         public Patient Patient { get; set; }
         public string MedicationName { get; set; }
         public string Dosage { get; set; }

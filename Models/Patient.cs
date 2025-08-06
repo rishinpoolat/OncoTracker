@@ -7,7 +7,7 @@ namespace OncoTrack.Models
 {
     public class Patient
     {
-        public int PatientId { get; set; }
+        public string PatientId { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         public string CancerType { get; set; }
