@@ -1,0 +1,147 @@
+@model OncoTrack.ViewModels.PatientDashboardViewModel
+@{
+    ViewData["Title"] = "Patient Dashboard";
+}
+
+<div class="container mt-4">
+    <h2>Welcome, @Model.PatientName</h2>
+    
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5>Cancer Type</h5>
+                    <p class="h4">@Model.CancerType</p>
+                    <p>Stage: @Model.Stage</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5>Diagnosis Date</h5>
+                    <p class="h4">@Model.DiagnosisDate.ToString("MMM dd, yyyy")</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5>Assigned Doctor</h5>
+                    <p class="h4">@Model.DoctorName</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Recent Treatment Updates</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentUpdates.Any())
+                    {
+                        <div class="list-group">
+                            @foreach (var update in Model.RecentUpdates)
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6>@update.UpdateType</h6>
+                                        <small>@update.UpdateDate.ToString("MMM dd, yyyy")</small>
+                                    </div>
+                                    <p class="mb-1">@update.Description</p>
+                                    @if (!string.IsNullOrEmpty(update.Notes))
+                                    {
+                                        <small class="text-muted">Notes: @update.Notes</small><br/>
+                                    }
+                                    <small class="text-muted">By @update.CreatedBy</small>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No recent updates.</p>
+                    }
+                    <a asp-action="TreatmentHistory" class="btn btn-sm btn-primary mt-3">View All Updates</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Active Medications</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.ActiveMedications.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (var med in Model.ActiveMedications)
+                            {
+                                <li class="list-group-item">
+                                    <strong>@med.MedicationName</strong><br/>
+                                    Dosage: @med.Dosage | Frequency: @med.Frequency
+                                    @if (!string.IsNullOrEmpty(med.SideEffects))
+                                    {
+                                        <br/><small class="text-warning">Side Effects: @med.SideEffects</small>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>No active medications.</p>
+                    }
+                    <a asp-action="Medications" class="btn btn-sm btn-primary mt-3">View All Medications</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Upcoming Appointments</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.UpcomingAppointments.Any())
+                    {
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Type</th>
+                                    <th>Doctor</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var appt in Model.UpcomingAppointments)
+                                {
+                                    <tr>
+                                        <td>@appt.AppointmentDate.ToString("MMM dd, yyyy")</td>
+                                        <td>@appt.AppointmentDate.ToString("hh:mm tt")</td>
+                                        <td>@appt.AppointmentType</td>
+                                        <td>@appt.DoctorName</td>
+                                        <td><span class="badge bg-success">@appt.Status</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p>No upcoming appointments.</p>
+                    }
+                    <a asp-action="Appointments" class="btn btn-sm btn-primary">View All Appointments</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

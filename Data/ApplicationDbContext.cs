@@ -21,6 +21,22 @@ namespace OncoTrack.Data
         {
             base.OnModelCreating(builder);
 
+            // Configure primary keys for string IDs
+            builder.Entity<Patient>()
+                .HasKey(p => p.PatientId);
+
+            builder.Entity<Doctor>()
+                .HasKey(d => d.DoctorId);
+
+            builder.Entity<TreatmentUpdate>()
+                .HasKey(t => t.TreatmentUpdateId);
+
+            builder.Entity<Medication>()
+                .HasKey(m => m.MedicationId);
+
+            builder.Entity<Appointment>()
+                .HasKey(a => a.AppointmentId);
+
             // Configure Patient-Doctor relationship
             builder.Entity<Patient>()
                 .HasOne(p => p.AssignedDoctor)

@@ -1,0 +1,80 @@
+@model OncoTrack.ViewModels.DoctorDashboardViewModel
+@{
+    ViewData["Title"] = "Doctor Dashboard";
+}
+
+<div class="container mt-4">
+    <h2>Welcome, @Model.DoctorName</h2>
+    <p class="text-muted">@Model.Specialization</p>
+    
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5>Total Patients</h5>
+                    <p class="h2">@Model.TotalPatients</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5>Appointments Today</h5>
+                    <p class="h2">@Model.AppointmentsToday</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5>Quick Actions</h5>
+                    <a asp-action="PatientList" class="btn btn-light btn-sm">View All Patients</a>
+                    <a asp-action="AssignPatient" class="btn btn-light btn-sm mt-2">Assign New Patient</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5>My Patients</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.Patients.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Cancer Type</th>
+                            <th>Stage</th>
+                            <th>Diagnosis Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var patient in Model.Patients.Take(10))
+                        {
+                            <tr>
+                                <td>@patient.User.FirstName @patient.User.LastName</td>
+                                <td>@patient.CancerType</td>
+                                <td>@patient.Stage</td>
+                                <td>@patient.DiagnosisDate.ToString("MMM dd, yyyy")</td>
+                                <td>
+                                    <a asp-action="PatientDetails" asp-route-id="@patient.PatientId" 
+                                       class="btn btn-sm btn-primary">View Details</a>
+                                    <a asp-action="AddTreatmentUpdate" asp-route-patientId="@patient.PatientId" 
+                                       class="btn btn-sm btn-success">Add Update</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No patients assigned yet. <a asp-action="AssignPatient">Assign a patient</a></p>
+            }
+        </div>
+    </div>
+</div>

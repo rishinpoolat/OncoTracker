@@ -89,15 +89,19 @@ namespace OncoTrack.Controllers
                     // Add claims
                     await _userManager.AddClaimAsync(user, new Claim("UserType", model.UserType));
 
-                    // Create Patient or Doctor record
+                    // Create Patient or Doctor record with string IDs
                     if (model.UserType == "Patient")
                     {
                         var patient = new Patient
                         {
+                            PatientId = Guid.NewGuid().ToString(), // Generate string ID
                             UserId = user.Id,
                             CancerType = model.CancerType ?? "",
                             Stage = model.Stage ?? "",
-                            DiagnosisDate = model.DiagnosisDate ?? DateTime.Now
+                            DiagnosisDate = model.DiagnosisDate ?? DateTime.Now,
+                            TreatmentUpdates = new List<TreatmentUpdate>(),
+                            Medications = new List<Medication>(),
+                            Appointments = new List<Appointment>()
                         };
                         _context.Patients.Add(patient);
                     }
@@ -105,10 +109,12 @@ namespace OncoTrack.Controllers
                     {
                         var doctor = new Doctor
                         {
+                            DoctorId = Guid.NewGuid().ToString(), // Generate string ID
                             UserId = user.Id,
                             Specialization = model.Specialization ?? "",
                             LicenseNumber = model.LicenseNumber ?? "",
-                            YearsOfExperience = model.YearsOfExperience ?? 0
+                            YearsOfExperience = model.YearsOfExperience ?? 0,
+                            Patients = new List<Patient>()
                         };
                         _context.Doctors.Add(doctor);
                     }
