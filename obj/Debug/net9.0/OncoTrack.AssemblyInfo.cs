@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OncoTrack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+67d0dca59053afe648aa76645178a7aa35d50fa5")]
 [assembly: System.Reflection.AssemblyProductAttribute("OncoTrack")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OncoTrack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
