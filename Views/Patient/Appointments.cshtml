@@ -83,8 +83,18 @@
                                         </div>
                                         @if (!string.IsNullOrEmpty(appointment.Notes))
                                         {
-                                            <div>
+                                            <div class="mb-2">
                                                 <strong>Notes:</strong> @appointment.Notes
+                                            </div>
+                                        }
+                                        @if (appointment.Status == "Approved" || appointment.Status == "Pending")
+                                        {
+                                            <div class="mt-2">
+                                                <a asp-controller="Patient" asp-action="EditAppointment" 
+                                                   asp-route-id="@appointment.AppointmentId"
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-edit"></i> Request Change
+                                                </a>
                                             </div>
                                         }
                                     </div>

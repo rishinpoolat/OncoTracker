@@ -219,5 +219,113 @@ namespace OncoTrack.Controllers
 
             return !existingAppointment;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditAppointment(string id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var patient = await _context.Patients
+                .Include(p => p.AssignedDoctor)
+                    .ThenInclude(d => d.User)
+                .FirstOrDefaultAsync(p => p.UserId == currentUser.Id);
+
+            var appointment = await _context.Appointments
+                .FirstOrDefaultAsync(a => a.AppointmentId == id && a.PatientId == patient.PatientId);
+
+            if (appointment == null || patient?.AssignedDoctor == null)
+            {
+                TempData["Error"] = "Appointment not found or no doctor assigned.";
+                return RedirectToAction("Appointments");
+            }
+
+            var viewModel = new BookAppointmentViewModel
+            {
+                DoctorId = patient.AssignedDoctor.DoctorId,
+                DoctorName = $"Dr. {patient.AssignedDoctor.User.FirstName} {patient.AssignedDoctor.User.LastName}",
+                AppointmentDate = appointment.AppointmentDate.Date,
+                AppointmentTime = appointment.AppointmentDate.TimeOfDay,
+                AppointmentType = appointment.AppointmentType,
+                Notes = appointment.Notes,
+                AvailableTimeSlots = GetAvailableTimeSlots()
+            };
+
+            ViewBag.OriginalAppointmentId = appointment.AppointmentId;
+            ViewBag.IsEdit = true;
+            return View("BookAppointment", viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateAppointmentRequest(string originalAppointmentId, BookAppointmentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.AvailableTimeSlots = GetAvailableTimeSlots();
+                ViewBag.OriginalAppointmentId = originalAppointmentId;
+                ViewBag.IsEdit = true;
+                return View("BookAppointment", model);
+            }
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            var patient = await _context.Patients
+                .Include(p => p.AssignedDoctor)
+                    .ThenInclude(d => d.User)
+                .FirstOrDefaultAsync(p => p.UserId == currentUser.Id);
+
+            if (patient?.AssignedDoctor == null)
+            {
+                TempData["Error"] = "No doctor assigned to your account.";
+                return RedirectToAction("Appointments");
+            }
+
+            var appointmentDateTime = model.AppointmentDate.Date + model.AppointmentTime;
+
+            if (appointmentDateTime <= DateTime.Now)
+            {
+                ModelState.AddModelError("", "Appointment date and time must be in the future.");
+                model.AvailableTimeSlots = GetAvailableTimeSlots();
+                ViewBag.OriginalAppointmentId = originalAppointmentId;
+                ViewBag.IsEdit = true;
+                return View("BookAppointment", model);
+            }
+
+            // Update existing appointment instead of creating new one
+            var appointment = await _context.Appointments
+                .FirstOrDefaultAsync(a => a.AppointmentId == originalAppointmentId);
+            
+            if (appointment != null)
+            {
+                // Check if new time slot is available (excluding current appointment)
+                var conflictingAppointment = await _context.Appointments
+                    .AnyAsync(a => a.DoctorId == model.DoctorId && 
+                             a.AppointmentDate == appointmentDateTime && 
+                             a.AppointmentId != originalAppointmentId &&
+                             (a.Status == "Approved" || a.Status == "Pending"));
+
+                if (conflictingAppointment)
+                {
+                    ModelState.AddModelError("", "Selected time slot is not available. Please choose another time.");
+                    model.AvailableTimeSlots = GetAvailableTimeSlots();
+                    ViewBag.OriginalAppointmentId = originalAppointmentId;
+                    ViewBag.IsEdit = true;
+                    return View("BookAppointment", model);
+                }
+
+                // Update the existing appointment
+                appointment.AppointmentDate = appointmentDateTime;
+                appointment.AppointmentType = model.AppointmentType;
+                appointment.Notes = $"UPDATED REQUEST: {model.Notes}";
+                appointment.Status = "Pending"; // Set to pending for doctor approval
+
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "Your appointment change request has been submitted and is pending doctor approval.";
+            }
+            else
+            {
+                TempData["Error"] = "Appointment not found.";
+            }
+
+            return RedirectToAction("Appointments");
+        }
     }
 }

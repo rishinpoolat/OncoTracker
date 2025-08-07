@@ -340,5 +340,170 @@ namespace OncoTrack.Controllers
 
             return View(appointments);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelAppointment(string appointmentId)
+        {
+            var appointment = await _context.Appointments
+                .FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
+
+            if (appointment != null)
+            {
+                appointment.Status = "Cancelled";
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Appointment cancelled successfully.";
+            }
+
+            return RedirectToAction("MyAppointments");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditAppointment(string id)
+        {
+            var appointment = await _context.Appointments
+                .Include(a => a.Patient)
+                    .ThenInclude(p => p.User)
+                .FirstOrDefaultAsync(a => a.AppointmentId == id);
+
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+
+            var model = new AddAppointmentViewModel
+            {
+                PatientId = appointment.PatientId,
+                AppointmentDate = appointment.AppointmentDate,
+                AppointmentType = appointment.AppointmentType,
+                Notes = appointment.Notes,
+                Status = appointment.Status
+            };
+
+            ViewBag.PatientName = $"{appointment.Patient.User.FirstName} {appointment.Patient.User.LastName}";
+            ViewBag.AppointmentId = appointment.AppointmentId;
+            ViewBag.IsEdit = true;
+            return View("AddAppointment", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateAppointment(string appointmentId, AddAppointmentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var appointment = await _context.Appointments
+                    .FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
+
+                if (appointment != null)
+                {
+                    appointment.AppointmentDate = model.AppointmentDate;
+                    appointment.AppointmentType = model.AppointmentType;
+                    appointment.Notes = model.Notes;
+                    appointment.Status = model.Status;
+
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "Appointment updated successfully.";
+                    return RedirectToAction("MyAppointments");
+                }
+            }
+
+            var patient = await _context.Patients
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.PatientId == model.PatientId);
+
+            if (patient != null)
+            {
+                ViewBag.PatientName = $"{patient.User.FirstName} {patient.User.LastName}";
+            }
+
+            ViewBag.AppointmentId = appointmentId;
+            ViewBag.IsEdit = true;
+            return View("AddAppointment", model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditMedication(string id)
+        {
+            var medication = await _context.Medications
+                .Include(m => m.Patient)
+                    .ThenInclude(p => p.User)
+                .FirstOrDefaultAsync(m => m.MedicationId == id);
+
+            if (medication == null)
+            {
+                return NotFound();
+            }
+
+            var model = new AddMedicationViewModel
+            {
+                PatientId = medication.PatientId,
+                MedicationName = medication.MedicationName,
+                Dosage = medication.Dosage,
+                Frequency = medication.Frequency,
+                StartDate = medication.StartDate,
+                EndDate = medication.EndDate,
+                SideEffects = medication.SideEffects
+            };
+
+            ViewBag.PatientName = $"{medication.Patient.User.FirstName} {medication.Patient.User.LastName}";
+            ViewBag.MedicationId = medication.MedicationId;
+            ViewBag.IsEdit = true;
+            return View("AddMedication", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateMedication(string medicationId, AddMedicationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var medication = await _context.Medications
+                    .FirstOrDefaultAsync(m => m.MedicationId == medicationId);
+
+                if (medication != null)
+                {
+                    medication.MedicationName = model.MedicationName;
+                    medication.Dosage = model.Dosage;
+                    medication.Frequency = model.Frequency;
+                    medication.StartDate = model.StartDate;
+                    medication.EndDate = model.EndDate;
+                    medication.SideEffects = model.SideEffects;
+                    medication.IsActive = model.EndDate == null || model.EndDate > DateTime.Now;
+
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "Medication updated successfully.";
+                    return RedirectToAction("PatientDetails", new { id = model.PatientId });
+                }
+            }
+
+            var patient = await _context.Patients
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.PatientId == model.PatientId);
+
+            if (patient != null)
+            {
+                ViewBag.PatientName = $"{patient.User.FirstName} {patient.User.LastName}";
+            }
+
+            ViewBag.MedicationId = medicationId;
+            ViewBag.IsEdit = true;
+            return View("AddMedication", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeactivateMedication(string medicationId)
+        {
+            var medication = await _context.Medications
+                .FirstOrDefaultAsync(m => m.MedicationId == medicationId);
+
+            if (medication != null)
+            {
+                medication.IsActive = false;
+                medication.EndDate = DateTime.Now;
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Medication deactivated successfully.";
+                return RedirectToAction("PatientDetails", new { id = medication.PatientId });
+            }
+
+            return RedirectToAction("PatientList");
+        }
     }
 }

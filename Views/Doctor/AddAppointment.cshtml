@@ -1,6 +1,6 @@
 @model OncoTrack.ViewModels.AddAppointmentViewModel
 @{
-    ViewData["Title"] = "Schedule Appointment";
+    ViewData["Title"] = ViewBag.IsEdit == true ? "Edit Appointment" : "Schedule Appointment";
 }
 
 <div class="container">
@@ -8,11 +8,15 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h4>Schedule New Appointment</h4>
-                    <p class="text-muted mb-0">Schedule an appointment for <strong>@ViewBag.PatientName</strong></p>
+                    <h4>@(ViewBag.IsEdit == true ? "Edit Appointment" : "Schedule New Appointment")</h4>
+                    <p class="text-muted mb-0">@(ViewBag.IsEdit == true ? "Edit appointment for" : "Schedule an appointment for") <strong>@ViewBag.PatientName</strong></p>
                 </div>
                 <div class="card-body">
-                    <form asp-action="AddAppointment" method="post">
+                    <form asp-action="@(ViewBag.IsEdit == true ? "UpdateAppointment" : "AddAppointment")" method="post">
+                        @if (ViewBag.IsEdit == true)
+                        {
+                            <input type="hidden" name="appointmentId" value="@ViewBag.AppointmentId" />
+                        }
                         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
                         
                         <input type="hidden" asp-for="PatientId" />

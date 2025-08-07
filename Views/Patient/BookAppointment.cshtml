@@ -11,7 +11,14 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="fas fa-calendar-plus mr-2"></i>
-                        Book Appointment with @Model.DoctorName
+                        @if (ViewBag.IsEdit == true)
+                        {
+                            <text>Edit Appointment with @Model.DoctorName</text>
+                        }
+                        else
+                        {
+                            <text>Book Appointment with @Model.DoctorName</text>
+                        }
                     </h3>
                 </div>
                 <div class="card-body">
@@ -24,7 +31,11 @@
                         </div>
                     }
 
-                    <form asp-action="BookAppointment" method="post">
+                    <form asp-action="@(ViewBag.IsEdit == true ? "UpdateAppointmentRequest" : "BookAppointment")" method="post">
+                        @if (ViewBag.IsEdit == true)
+                        {
+                            <input type="hidden" name="originalAppointmentId" value="@ViewBag.OriginalAppointmentId" />
+                        }
                         <input type="hidden" asp-for="DoctorId" />
                         <input type="hidden" asp-for="DoctorName" />
                         
@@ -80,7 +91,14 @@
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle mr-2"></i>
                             <strong>Note:</strong> Doctor consultation hours are from 10:00 AM to 6:00 PM. 
-                            Your appointment request will be reviewed by your doctor and you'll be notified of the status.
+                            @if (ViewBag.IsEdit == true)
+                            {
+                                <text>Editing an appointment will update your existing appointment and set it as pending for doctor approval.</text>
+                            }
+                            else
+                            {
+                                <text>Your appointment request will be reviewed by your doctor and you'll be notified of the status.</text>
+                            }
                         </div>
 
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -89,7 +107,14 @@
                             <div class="col-md-6">
                                 <button type="submit" class="btn btn-primary btn-block">
                                     <i class="fas fa-paper-plane mr-2"></i>
-                                    Submit Request
+                                    @if (ViewBag.IsEdit == true)
+                                    {
+                                        <text>Update Request</text>
+                                    }
+                                    else
+                                    {
+                                        <text>Submit Request</text>
+                                    }
                                 </button>
                             </div>
                             <div class="col-md-6">
