@@ -16,7 +16,7 @@ namespace OncoTrack.Extensions
             // Configure Entity Framework with SQLite
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
-                    configuration.GetConnectionString("DefaultConnection") ?? 
+                    configuration.GetConnectionString("DefaultConnection") ??
                     "Data Source=oncotrack.db"
                 ));
 
@@ -33,10 +33,10 @@ namespace OncoTrack.Extensions
                 options.Password.RequireNonAlphanumeric = identityOptions.Password.RequireNonAlphanumeric;
                 options.Password.RequireUppercase = identityOptions.Password.RequireUppercase;
                 options.Password.RequireLowercase = identityOptions.Password.RequireLowercase;
-                
+
                 // User settings
                 options.User.RequireUniqueEmail = identityOptions.User.RequireUniqueEmail;
-                
+
                 // Sign in settings
                 options.SignIn.RequireConfirmedEmail = identityOptions.SignIn.RequireConfirmedEmail;
             })
@@ -78,7 +78,7 @@ namespace OncoTrack.Extensions
             {
                 options.AddPolicy("DoctorOnly", policy => policy.RequireClaim("UserType", "Doctor"));
                 options.AddPolicy("PatientOnly", policy => policy.RequireClaim("UserType", "Patient"));
-                options.AddPolicy("HealthcareStaff", policy => 
+                options.AddPolicy("HealthcareStaff", policy =>
                     policy.RequireAssertion(context =>
                         context.User.HasClaim("UserType", "Doctor") ||
                         context.User.HasClaim("UserType", "Admin")));
@@ -99,7 +99,7 @@ namespace OncoTrack.Extensions
             services.AddIdentityServices(configuration);
             services.AddAuthenticationServices(configuration);
             services.AddAuthorizationPolicies();
-            
+
             return services;
         }
     }

@@ -45,10 +45,10 @@ namespace OncoTrack.Extensions
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
                     context.Database.EnsureCreated();
-                    
+
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    
+
                     // Create roles if they don't exist
                     string[] roles = { "Doctor", "Patient", "Admin" };
                     foreach (var role in roles)
@@ -58,7 +58,7 @@ namespace OncoTrack.Extensions
                             await roleManager.CreateAsync(new IdentityRole(role));
                         }
                     }
-                    
+
                     // Add any additional seeding logic here
                     // For example, creating default admin user, sample data, etc.
                 }
