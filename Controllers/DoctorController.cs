@@ -48,8 +48,9 @@ namespace OncoTrack.Controllers
                 Patients = doctor.Patients.ToList(),
                 TotalPatients = doctor.Patients.Count,
                 AppointmentsToday = await _context.Appointments
-                    .CountAsync(a => patientIds.Contains(a.PatientId) 
-                        && a.AppointmentDate.Date == DateTime.Today)
+                    .CountAsync(a => a.DoctorId == doctor.DoctorId 
+                        && a.AppointmentDate.Date == DateTime.Today 
+                        && a.Status == "Approved")
             };
 
             return View(viewModel);

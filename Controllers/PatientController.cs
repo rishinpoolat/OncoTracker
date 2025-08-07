@@ -58,7 +58,7 @@ namespace OncoTrack.Controllers
                     .Where(m => m.IsActive)
                     .ToList(),
                 UpcomingAppointments = patient.Appointments
-                    .Where(a => a.AppointmentDate >= DateTime.Now && a.Status == "Scheduled")
+                    .Where(a => a.AppointmentDate >= DateTime.Now && a.Status == "Approved")
                     .OrderBy(a => a.AppointmentDate)
                     .Take(5)
                     .ToList()
