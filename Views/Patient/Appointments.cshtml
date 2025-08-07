@@ -1,159 +1,459 @@
 @model List<OncoTrack.Models.Appointment>
 @{
-    ViewData["Title"] = "Appointments";
+    ViewData["Title"] = "My Appointments - OncoTracker";
+    var approvedAppointments = Model.Where(a => a.Status == "Approved").OrderBy(a => a.AppointmentDate).ToList();
+    var pendingAppointments = Model.Where(a => a.Status == "Pending").OrderByDescending(a => a.AppointmentDate).ToList();
+    var rejectedAppointments = Model.Where(a => a.Status == "Rejected").OrderByDescending(a => a.AppointmentDate).ToList();
+    var completedAppointments = Model.Where(a => a.Status == "Completed").OrderByDescending(a => a.AppointmentDate).ToList();
+    var cancelledAppointments = Model.Where(a => a.Status == "Cancelled").OrderByDescending(a => a.AppointmentDate).ToList();
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>My Appointments</h2>
-                <div>
-                    <a href="@Url.Action("BookAppointment", "Patient")" class="btn btn-primary me-2">
-                        <i class="fas fa-calendar-plus"></i> Book Appointment
-                    </a>
-                    <a href="@Url.Action("Index", "Patient")" class="btn btn-secondary">Back to Dashboard</a>
-                </div>
+<!-- Hero Section -->
+<div class="appointments-hero bg-gradient-primary text-white py-4 mb-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-6 fw-bold mb-2">My Appointments</h1>
+                <p class="mb-0">Manage and track all your medical appointments in one place.</p>
             </div>
-            
-
-            @if (Model.Any())
-            {
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4>Upcoming Appointments</h4>
-                        @{
-                            var upcomingAppointments = Model.Where(a => a.AppointmentDate >= DateTime.Now).OrderBy(a => a.AppointmentDate);
-                        }
-                        @if (upcomingAppointments.Any())
-                        {
-                            @foreach (var appointment in upcomingAppointments)
-                            {
-                                <div class="card mb-3">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>@appointment.AppointmentType</strong>
-                                            <div class="text-muted small">@appointment.AppointmentDate.ToString("MMM dd, yyyy at hh:mm tt")</div>
-                                        </div>
-                                        @if (appointment.Status == "Pending")
-                                        {
-                                            <span class="badge bg-warning">@appointment.Status</span>
-                                        }
-                                        else if (appointment.Status == "Approved")
-                                        {
-                                            <span class="badge bg-success">@appointment.Status</span>
-                                        }
-                                        else if (appointment.Status == "Rejected")
-                                        {
-                                            <span class="badge bg-danger">@appointment.Status</span>
-                                        }
-                                        else if (appointment.Status == "Completed")
-                                        {
-                                            <span class="badge bg-primary">@appointment.Status</span>
-                                        }
-                                        else if (appointment.Status == "Cancelled")
-                                        {
-                                            <span class="badge bg-danger">@appointment.Status</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">@appointment.Status</span>
-                                        }
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="mb-2">
-                                            <strong>Doctor:</strong> @appointment.DoctorName
-                                        </div>
-                                        @if (!string.IsNullOrEmpty(appointment.Notes))
-                                        {
-                                            <div class="mb-2">
-                                                <strong>Notes:</strong> @appointment.Notes
-                                            </div>
-                                        }
-                                        @if (appointment.Status == "Approved" || appointment.Status == "Pending")
-                                        {
-                                            <div class="mt-2">
-                                                <a asp-controller="Patient" asp-action="EditAppointment" 
-                                                   asp-route-id="@appointment.AppointmentId"
-                                                   class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-edit"></i> Request Change
-                                                </a>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                        }
-                        else
-                        {
-                            <div class="alert alert-info">
-                                <p class="mb-0">No upcoming appointments scheduled.</p>
-                            </div>
-                        }
-                    </div>
-
-                    <div class="col-md-6">
-                        <h4>Past Appointments</h4>
-                        @{
-                            var pastAppointments = Model.Where(a => a.AppointmentDate < DateTime.Now).OrderByDescending(a => a.AppointmentDate);
-                        }
-                        @if (pastAppointments.Any())
-                        {
-                            @foreach (var appointment in pastAppointments)
-                            {
-                                <div class="card mb-3">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>@appointment.AppointmentType</strong>
-                                            <div class="text-muted small">@appointment.AppointmentDate.ToString("MMM dd, yyyy at hh:mm tt")</div>
-                                        </div>
-                                        @if (appointment.Status == "Completed")
-                                        {
-                                            <span class="badge bg-success">@appointment.Status</span>
-                                        }
-                                        else if (appointment.Status == "Cancelled")
-                                        {
-                                            <span class="badge bg-danger">@appointment.Status</span>
-                                        }
-                                        else if (appointment.Status == "No Show")
-                                        {
-                                            <span class="badge bg-warning">@appointment.Status</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">@appointment.Status</span>
-                                        }
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="mb-2">
-                                            <strong>Doctor:</strong> @appointment.DoctorName
-                                        </div>
-                                        @if (!string.IsNullOrEmpty(appointment.Notes))
-                                        {
-                                            <div>
-                                                <strong>Notes:</strong> @appointment.Notes
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                        }
-                        else
-                        {
-                            <div class="alert alert-info">
-                                <p class="mb-0">No past appointments found.</p>
-                            </div>
-                        }
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="alert alert-info">
-                    <h4>No Appointments Found</h4>
-                    <p>You don't have any appointments scheduled yet. Your doctor will schedule appointments for checkups and treatments as needed.</p>
-                </div>
-            }
+            <div class="col-md-4 text-end">
+                <a href="@Url.Action("BookAppointment", "Patient")" class="btn btn-light me-2">
+                    <i class="fas fa-calendar-plus me-2"></i>Book New Appointment
+                </a>
+                <a href="@Url.Action("Index", "Patient")" class="btn btn-outline-light">
+                    <i class="fas fa-arrow-left me-2"></i>Dashboard
+                </a>
+            </div>
         </div>
     </div>
 </div>
+
+<div class="container">
+    @if (Model.Any())
+    {
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-2 mb-3">
+                <div class="stat-card-mini text-center p-3 bg-success text-white rounded">
+                    <div class="fw-bold h4 mb-1">@approvedAppointments.Count</div>
+                    <small>Approved</small>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <div class="stat-card-mini text-center p-3 bg-warning text-white rounded">
+                    <div class="fw-bold h4 mb-1">@pendingAppointments.Count</div>
+                    <small>Pending</small>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <div class="stat-card-mini text-center p-3 bg-danger text-white rounded">
+                    <div class="fw-bold h4 mb-1">@rejectedAppointments.Count</div>
+                    <small>Rejected</small>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <div class="stat-card-mini text-center p-3 bg-primary text-white rounded">
+                    <div class="fw-bold h4 mb-1">@completedAppointments.Count</div>
+                    <small>Completed</small>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <div class="stat-card-mini text-center p-3 bg-secondary text-white rounded">
+                    <div class="fw-bold h4 mb-1">@cancelledAppointments.Count</div>
+                    <small>Cancelled</small>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <div class="stat-card-mini text-center p-3 bg-info text-white rounded">
+                    <div class="fw-bold h4 mb-1">@Model.Count</div>
+                    <small>Total</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments Tabs -->
+        <div class="card border-0 shadow-sm rounded-lg">
+            <div class="card-header bg-transparent border-0">
+                <ul class="nav nav-tabs card-header-tabs" id="appointmentTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active fw-semibold" id="approved-tab" data-bs-toggle="tab" data-bs-target="#approved" type="button" role="tab">
+                            <i class="fas fa-check-circle text-success me-2"></i>Approved <span class="badge bg-success ms-1">@approvedAppointments.Count</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-semibold" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab">
+                            <i class="fas fa-clock text-warning me-2"></i>Pending <span class="badge bg-warning ms-1">@pendingAppointments.Count</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-semibold" id="rejected-tab" data-bs-toggle="tab" data-bs-target="#rejected" type="button" role="tab">
+                            <i class="fas fa-times-circle text-danger me-2"></i>Rejected <span class="badge bg-danger ms-1">@rejectedAppointments.Count</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-semibold" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab">
+                            <i class="fas fa-check text-primary me-2"></i>Completed <span class="badge bg-primary ms-1">@completedAppointments.Count</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-semibold" id="cancelled-tab" data-bs-toggle="tab" data-bs-target="#cancelled" type="button" role="tab">
+                            <i class="fas fa-ban text-secondary me-2"></i>Cancelled <span class="badge bg-secondary ms-1">@cancelledAppointments.Count</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="appointmentTabsContent">
+                    <!-- Approved Tab -->
+                    <div class="tab-pane fade show active" id="approved" role="tabpanel">
+                        @if (approvedAppointments.Any())
+                        {
+                            <div class="row">
+                                @foreach (var appointment in approvedAppointments)
+                                {
+                                    <div class="col-md-6 mb-3">
+                                        <div class="appointment-card border rounded p-3 h-100">
+                                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <div class="appointment-info">
+                                                    <h6 class="fw-bold text-primary mb-1">@appointment.AppointmentType</h6>
+                                                    <div class="appointment-datetime text-muted mb-2">
+                                                        <i class="fas fa-calendar me-1"></i>@appointment.AppointmentDate.ToString("MMM dd, yyyy")
+                                                        <span class="mx-2">•</span>
+                                                        <i class="fas fa-clock me-1"></i>@appointment.AppointmentDate.ToString("hh:mm tt")
+                                                    </div>
+                                                    <div class="appointment-doctor text-muted">
+                                                        <i class="fas fa-user-md me-1"></i>@appointment.DoctorName
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-success-subtle text-success px-3 py-2">Approved</span>
+                                            </div>
+                                            @if (!string.IsNullOrEmpty(appointment.Notes))
+                                            {
+                                                <div class="appointment-notes mb-3 p-2 bg-light rounded">
+                                                    <small class="text-muted"><i class="fas fa-sticky-note me-1"></i>Notes:</small>
+                                                    <div class="small">@appointment.Notes</div>
+                                                </div>
+                                            }
+                                            <div class="appointment-actions">
+                                                <a asp-action="EditAppointment" asp-route-id="@appointment.AppointmentId" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-edit me-1"></i>Request Change
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <i class="fas fa-calendar-check text-muted mb-3" style="font-size: 3rem;"></i>
+                                <h5 class="text-muted mb-3">No Approved Appointments</h5>
+                                <p class="text-muted">Your approved appointments will appear here.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Pending Tab -->
+                    <div class="tab-pane fade" id="pending" role="tabpanel">
+                        @if (pendingAppointments.Any())
+                        {
+                            <div class="row">
+                                @foreach (var appointment in pendingAppointments)
+                                {
+                                    <div class="col-md-6 mb-3">
+                                        <div class="appointment-card border rounded p-3 h-100 border-warning">
+                                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <div class="appointment-info">
+                                                    <h6 class="fw-bold text-warning mb-1">@appointment.AppointmentType</h6>
+                                                    <div class="appointment-datetime text-muted mb-2">
+                                                        <i class="fas fa-calendar me-1"></i>@appointment.AppointmentDate.ToString("MMM dd, yyyy")
+                                                        <span class="mx-2">•</span>
+                                                        <i class="fas fa-clock me-1"></i>@appointment.AppointmentDate.ToString("hh:mm tt")
+                                                    </div>
+                                                    <div class="appointment-doctor text-muted">
+                                                        <i class="fas fa-user-md me-1"></i>@appointment.DoctorName
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-warning-subtle text-warning px-3 py-2">Pending</span>
+                                            </div>
+                                            @if (!string.IsNullOrEmpty(appointment.Notes))
+                                            {
+                                                <div class="appointment-notes mb-3 p-2 bg-light rounded">
+                                                    <small class="text-muted"><i class="fas fa-sticky-note me-1"></i>Notes:</small>
+                                                    <div class="small">@appointment.Notes</div>
+                                                </div>
+                                            }
+                                            <div class="appointment-actions">
+                                                <a asp-action="EditAppointment" asp-route-id="@appointment.AppointmentId" class="btn btn-outline-warning btn-sm">
+                                                    <i class="fas fa-edit me-1"></i>Modify Request
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <i class="fas fa-clock text-muted mb-3" style="font-size: 3rem;"></i>
+                                <h5 class="text-muted mb-3">No Pending Appointments</h5>
+                                <p class="text-muted">Appointments waiting for doctor approval will appear here.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Rejected Tab -->
+                    <div class="tab-pane fade" id="rejected" role="tabpanel">
+                        @if (rejectedAppointments.Any())
+                        {
+                            <div class="row">
+                                @foreach (var appointment in rejectedAppointments)
+                                {
+                                    <div class="col-md-6 mb-3">
+                                        <div class="appointment-card border rounded p-3 h-100 border-danger">
+                                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <div class="appointment-info">
+                                                    <h6 class="fw-bold text-danger mb-1">@appointment.AppointmentType</h6>
+                                                    <div class="appointment-datetime text-muted mb-2">
+                                                        <i class="fas fa-calendar me-1"></i>@appointment.AppointmentDate.ToString("MMM dd, yyyy")
+                                                        <span class="mx-2">•</span>
+                                                        <i class="fas fa-clock me-1"></i>@appointment.AppointmentDate.ToString("hh:mm tt")
+                                                    </div>
+                                                    <div class="appointment-doctor text-muted">
+                                                        <i class="fas fa-user-md me-1"></i>@appointment.DoctorName
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-danger-subtle text-danger px-3 py-2">Rejected</span>
+                                            </div>
+                                            @if (!string.IsNullOrEmpty(appointment.Notes))
+                                            {
+                                                <div class="appointment-notes mb-3 p-2 bg-light rounded">
+                                                    <small class="text-muted"><i class="fas fa-sticky-note me-1"></i>Notes:</small>
+                                                    <div class="small">@appointment.Notes</div>
+                                                </div>
+                                            }
+                                            <div class="appointment-actions">
+                                                <a asp-action="BookAppointment" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-calendar-plus me-1"></i>Book New Appointment
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <i class="fas fa-times-circle text-muted mb-3" style="font-size: 3rem;"></i>
+                                <h5 class="text-muted mb-3">No Rejected Appointments</h5>
+                                <p class="text-muted">Appointments that were declined by your doctor will appear here.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Completed Tab -->
+                    <div class="tab-pane fade" id="completed" role="tabpanel">
+                        @if (completedAppointments.Any())
+                        {
+                            <div class="row">
+                                @foreach (var appointment in completedAppointments)
+                                {
+                                    <div class="col-md-6 mb-3">
+                                        <div class="appointment-card border rounded p-3 h-100 border-primary">
+                                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <div class="appointment-info">
+                                                    <h6 class="fw-bold text-primary mb-1">@appointment.AppointmentType</h6>
+                                                    <div class="appointment-datetime text-muted mb-2">
+                                                        <i class="fas fa-calendar me-1"></i>@appointment.AppointmentDate.ToString("MMM dd, yyyy")
+                                                        <span class="mx-2">•</span>
+                                                        <i class="fas fa-clock me-1"></i>@appointment.AppointmentDate.ToString("hh:mm tt")
+                                                    </div>
+                                                    <div class="appointment-doctor text-muted">
+                                                        <i class="fas fa-user-md me-1"></i>@appointment.DoctorName
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-primary-subtle text-primary px-3 py-2">Completed</span>
+                                            </div>
+                                            @if (!string.IsNullOrEmpty(appointment.Notes))
+                                            {
+                                                <div class="appointment-notes mb-3 p-2 bg-light rounded">
+                                                    <small class="text-muted"><i class="fas fa-sticky-note me-1"></i>Notes:</small>
+                                                    <div class="small">@appointment.Notes</div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <i class="fas fa-check text-muted mb-3" style="font-size: 3rem;"></i>
+                                <h5 class="text-muted mb-3">No Completed Appointments</h5>
+                                <p class="text-muted">Your completed appointments will appear here.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Cancelled Tab -->
+                    <div class="tab-pane fade" id="cancelled" role="tabpanel">
+                        @if (cancelledAppointments.Any())
+                        {
+                            <div class="row">
+                                @foreach (var appointment in cancelledAppointments)
+                                {
+                                    <div class="col-md-6 mb-3">
+                                        <div class="appointment-card border rounded p-3 h-100 border-secondary">
+                                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <div class="appointment-info">
+                                                    <h6 class="fw-bold text-secondary mb-1">@appointment.AppointmentType</h6>
+                                                    <div class="appointment-datetime text-muted mb-2">
+                                                        <i class="fas fa-calendar me-1"></i>@appointment.AppointmentDate.ToString("MMM dd, yyyy")
+                                                        <span class="mx-2">•</span>
+                                                        <i class="fas fa-clock me-1"></i>@appointment.AppointmentDate.ToString("hh:mm tt")
+                                                    </div>
+                                                    <div class="appointment-doctor text-muted">
+                                                        <i class="fas fa-user-md me-1"></i>@appointment.DoctorName
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-secondary-subtle text-secondary px-3 py-2">Cancelled</span>
+                                            </div>
+                                            @if (!string.IsNullOrEmpty(appointment.Notes))
+                                            {
+                                                <div class="appointment-notes mb-3 p-2 bg-light rounded">
+                                                    <small class="text-muted"><i class="fas fa-sticky-note me-1"></i>Notes:</small>
+                                                    <div class="small">@appointment.Notes</div>
+                                                </div>
+                                            }
+                                            <div class="appointment-actions">
+                                                <a asp-action="BookAppointment" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-calendar-plus me-1"></i>Book New Appointment
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <i class="fas fa-ban text-muted mb-3" style="font-size: 3rem;"></i>
+                                <h5 class="text-muted mb-3">No Cancelled Appointments</h5>
+                                <p class="text-muted">Appointments that were cancelled will appear here.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-calendar-times text-muted mb-4" style="font-size: 4rem;"></i>
+            <h3 class="text-muted mb-3">No Appointments Found</h3>
+            <p class="text-muted mb-4">You don't have any appointments scheduled yet. Book your first appointment to get started.</p>
+            <a href="@Url.Action("BookAppointment", "Patient")" class="btn btn-primary">
+                <i class="fas fa-calendar-plus me-2"></i>Book Your First Appointment
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .appointments-hero {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stat-card-mini {
+        transition: transform 0.2s ease;
+    }
+    
+    .stat-card-mini:hover {
+        transform: translateY(-2px);
+    }
+    
+    .nav-tabs .nav-link {
+        border: none;
+        border-radius: 0;
+        color: #6c757d;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-tabs .nav-link.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+    }
+    
+    .nav-tabs .nav-link:hover {
+        border: none;
+        background: #f8f9fa;
+    }
+    
+    .appointment-card {
+        background: white;
+        transition: all 0.2s ease;
+    }
+    
+    .appointment-card:hover {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+    
+    .appointment-datetime {
+        font-size: 0.875rem;
+    }
+    
+    .appointment-doctor {
+        font-size: 0.875rem;
+    }
+    
+    .appointment-notes {
+        border-left: 4px solid #007bff;
+        background: #f8f9fa !important;
+    }
+    
+    .badge {
+        font-size: 0.75rem;
+        border-radius: 12px;
+    }
+    
+    .bg-success-subtle {
+        background-color: rgba(25, 135, 84, 0.1) !important;
+    }
+    
+    .bg-warning-subtle {
+        background-color: rgba(255, 193, 7, 0.1) !important;
+    }
+    
+    .bg-danger-subtle {
+        background-color: rgba(220, 53, 69, 0.1) !important;
+    }
+    
+    .bg-primary-subtle {
+        background-color: rgba(13, 110, 253, 0.1) !important;
+    }
+    
+    .bg-secondary-subtle {
+        background-color: rgba(108, 117, 125, 0.1) !important;
+    }
+    
+    .rounded-lg {
+        border-radius: 15px !important;
+    }
+    
+    .tab-content {
+        min-height: 400px;
+    }
+</style>
