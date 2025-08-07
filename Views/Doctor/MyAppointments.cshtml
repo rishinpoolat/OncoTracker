@@ -1,0 +1,114 @@
+@model List<OncoTrack.Models.Appointment>
+
+@{
+    ViewData["Title"] = "My Appointments";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-calendar mr-2"></i>
+                        My Approved Appointments
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Date & Time</th>
+                                        <th>Type</th>
+                                        <th>Notes</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var appointment in Model)
+                                    {
+                                        <tr class="@(appointment.AppointmentDate.Date == DateTime.Today ? "table-info" : "")">
+                                            <td>
+                                                <strong>@appointment.Patient.User.FirstName @appointment.Patient.User.LastName</strong><br>
+                                                <small class="text-muted">@appointment.Patient.CancerType - Stage @appointment.Patient.Stage</small>
+                                            </td>
+                                            <td>
+                                                <i class="fas fa-calendar mr-1"></i>
+                                                @appointment.AppointmentDate.ToString("MMM dd, yyyy")<br>
+                                                <i class="fas fa-clock mr-1"></i>
+                                                @appointment.AppointmentDate.ToString("hh:mm tt")
+                                                @if (appointment.AppointmentDate.Date == DateTime.Today)
+                                                {
+                                                    <br><span class="badge badge-primary">Today</span>
+                                                }
+                                                else if (appointment.AppointmentDate.Date == DateTime.Today.AddDays(1))
+                                                {
+                                                    <br><span class="badge badge-info">Tomorrow</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-info">@appointment.AppointmentType</span>
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(appointment.Notes))
+                                                {
+                                                    <div style="max-width: 200px; word-wrap: break-word;">
+                                                        @appointment.Notes
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">No notes</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-success">@appointment.Status</span>
+                                            </td>
+                                            <td>
+                                                <a asp-controller="Doctor" asp-action="PatientDetails" 
+                                                   asp-route-id="@appointment.PatientId"
+                                                   class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-user mr-1"></i>
+                                                    View Patient
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No approved appointments</h5>
+                            <p class="text-muted">Your approved appointments will appear here.</p>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a asp-action="AppointmentRequests" class="btn btn-warning">
+                                <i class="fas fa-clock mr-2"></i>
+                                Pending Requests
+                            </a>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Back to Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

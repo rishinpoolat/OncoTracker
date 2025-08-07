@@ -1,0 +1,129 @@
+@model List<OncoTrack.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Appointment Requests";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-calendar-check mr-2"></i>
+                        Pending Appointment Requests
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <i class="fas fa-check-circle mr-2"></i>
+                            @TempData["Success"]
+                        </div>
+                    }
+
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Date & Time</th>
+                                        <th>Type</th>
+                                        <th>Notes</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var appointment in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@appointment.Patient.User.FirstName @appointment.Patient.User.LastName</strong><br>
+                                                <small class="text-muted">@appointment.Patient.CancerType</small>
+                                            </td>
+                                            <td>
+                                                <i class="fas fa-calendar mr-1"></i>
+                                                @appointment.AppointmentDate.ToString("MMM dd, yyyy")<br>
+                                                <i class="fas fa-clock mr-1"></i>
+                                                @appointment.AppointmentDate.ToString("hh:mm tt")
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-info">@appointment.AppointmentType</span>
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(appointment.Notes))
+                                                {
+                                                    <div style="max-width: 200px; word-wrap: break-word;">
+                                                        @appointment.Notes
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">No notes</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-warning">@appointment.Status</span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <form asp-action="ApproveAppointment" method="post" style="display: inline;">
+                                                        <input type="hidden" name="appointmentId" value="@appointment.AppointmentId" />
+                                                        <button type="submit" 
+                                                                class="btn btn-success btn-sm" 
+                                                                onclick="return confirm('Are you sure you want to approve this appointment?')">
+                                                            <i class="fas fa-check mr-1"></i>
+                                                            Approve
+                                                        </button>
+                                                    </form>
+                                                    <form asp-action="RejectAppointment" method="post" style="display: inline;">
+                                                        <input type="hidden" name="appointmentId" value="@appointment.AppointmentId" />
+                                                        <button type="submit" 
+                                                                class="btn btn-danger btn-sm" 
+                                                                onclick="return confirm('Are you sure you want to reject this appointment?')">
+                                                            <i class="fas fa-times mr-1"></i>
+                                                            Reject
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No pending appointment requests</h5>
+                            <p class="text-muted">When patients request appointments, they will appear here for your review.</p>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a asp-action="MyAppointments" class="btn btn-primary">
+                                <i class="fas fa-calendar mr-2"></i>
+                                View My Appointments
+                            </a>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Back to Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

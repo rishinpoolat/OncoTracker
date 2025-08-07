@@ -1,0 +1,166 @@
+@model List<OncoTrack.Models.Appointment>
+@{
+    ViewData["Title"] = "Appointments";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>My Appointments</h2>
+                <div>
+                    <a href="@Url.Action("BookAppointment", "Patient")" class="btn btn-primary me-2">
+                        <i class="fas fa-calendar-plus"></i> Book Appointment
+                    </a>
+                    <a href="@Url.Action("Index", "Patient")" class="btn btn-secondary">Back to Dashboard</a>
+                </div>
+            </div>
+            
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <i class="fas fa-check-circle mr-2"></i>
+                    @TempData["Success"]
+                </div>
+            }
+            
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    @TempData["Error"]
+                </div>
+            }
+
+            @if (Model.Any())
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Upcoming Appointments</h4>
+                        @{
+                            var upcomingAppointments = Model.Where(a => a.AppointmentDate >= DateTime.Now).OrderBy(a => a.AppointmentDate);
+                        }
+                        @if (upcomingAppointments.Any())
+                        {
+                            @foreach (var appointment in upcomingAppointments)
+                            {
+                                <div class="card mb-3">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>@appointment.AppointmentType</strong>
+                                            <div class="text-muted small">@appointment.AppointmentDate.ToString("MMM dd, yyyy at hh:mm tt")</div>
+                                        </div>
+                                        @if (appointment.Status == "Pending")
+                                        {
+                                            <span class="badge bg-warning">@appointment.Status</span>
+                                        }
+                                        else if (appointment.Status == "Approved")
+                                        {
+                                            <span class="badge bg-success">@appointment.Status</span>
+                                        }
+                                        else if (appointment.Status == "Rejected")
+                                        {
+                                            <span class="badge bg-danger">@appointment.Status</span>
+                                        }
+                                        else if (appointment.Status == "Completed")
+                                        {
+                                            <span class="badge bg-primary">@appointment.Status</span>
+                                        }
+                                        else if (appointment.Status == "Cancelled")
+                                        {
+                                            <span class="badge bg-danger">@appointment.Status</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@appointment.Status</span>
+                                        }
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-2">
+                                            <strong>Doctor:</strong> @appointment.DoctorName
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(appointment.Notes))
+                                        {
+                                            <div>
+                                                <strong>Notes:</strong> @appointment.Notes
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="alert alert-info">
+                                <p class="mb-0">No upcoming appointments scheduled.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="col-md-6">
+                        <h4>Past Appointments</h4>
+                        @{
+                            var pastAppointments = Model.Where(a => a.AppointmentDate < DateTime.Now).OrderByDescending(a => a.AppointmentDate);
+                        }
+                        @if (pastAppointments.Any())
+                        {
+                            @foreach (var appointment in pastAppointments)
+                            {
+                                <div class="card mb-3">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>@appointment.AppointmentType</strong>
+                                            <div class="text-muted small">@appointment.AppointmentDate.ToString("MMM dd, yyyy at hh:mm tt")</div>
+                                        </div>
+                                        @if (appointment.Status == "Completed")
+                                        {
+                                            <span class="badge bg-success">@appointment.Status</span>
+                                        }
+                                        else if (appointment.Status == "Cancelled")
+                                        {
+                                            <span class="badge bg-danger">@appointment.Status</span>
+                                        }
+                                        else if (appointment.Status == "No Show")
+                                        {
+                                            <span class="badge bg-warning">@appointment.Status</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@appointment.Status</span>
+                                        }
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-2">
+                                            <strong>Doctor:</strong> @appointment.DoctorName
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(appointment.Notes))
+                                        {
+                                            <div>
+                                                <strong>Notes:</strong> @appointment.Notes
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="alert alert-info">
+                                <p class="mb-0">No past appointments found.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <h4>No Appointments Found</h4>
+                    <p>You don't have any appointments scheduled yet. Your doctor will schedule appointments for checkups and treatments as needed.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

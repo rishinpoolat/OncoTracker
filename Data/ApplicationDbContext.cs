@@ -76,6 +76,12 @@ namespace OncoTrack.Data
                 .WithMany(p => p.Appointments)
                 .HasForeignKey(a => a.PatientId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Appointment>()
+                .HasOne(a => a.Doctor)
+                .WithMany()
+                .HasForeignKey(a => a.DoctorId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

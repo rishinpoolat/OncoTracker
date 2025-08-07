@@ -1,0 +1,127 @@
+@model OncoTrack.ViewModels.AddMedicationViewModel
+@{
+    ViewData["Title"] = "Add Medication";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Add New Medication</h4>
+                    <p class="text-muted mb-0">Prescribe a new medication for the patient</p>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddMedication" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <input type="hidden" asp-for="PatientId" />
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="MedicationName" class="form-label"></label>
+                                    <input asp-for="MedicationName" class="form-control" placeholder="e.g., Chemotherapy, Tamoxifen, etc." />
+                                    <span asp-validation-for="MedicationName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Dosage" class="form-label"></label>
+                                    <input asp-for="Dosage" class="form-control" placeholder="e.g., 20mg, 500ml, etc." />
+                                    <span asp-validation-for="Dosage" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Frequency" class="form-label"></label>
+                                    <select asp-for="Frequency" class="form-select">
+                                        <option value="">Select frequency...</option>
+                                        <option value="Once daily">Once daily</option>
+                                        <option value="Twice daily">Twice daily</option>
+                                        <option value="Three times daily">Three times daily</option>
+                                        <option value="Four times daily">Four times daily</option>
+                                        <option value="Every 4 hours">Every 4 hours</option>
+                                        <option value="Every 6 hours">Every 6 hours</option>
+                                        <option value="Every 8 hours">Every 8 hours</option>
+                                        <option value="Every 12 hours">Every 12 hours</option>
+                                        <option value="Weekly">Weekly</option>
+                                        <option value="Monthly">Monthly</option>
+                                        <option value="As needed">As needed</option>
+                                        <option value="Before meals">Before meals</option>
+                                        <option value="After meals">After meals</option>
+                                        <option value="At bedtime">At bedtime</option>
+                                    </select>
+                                    <span asp-validation-for="Frequency" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="StartDate" class="form-label"></label>
+                                    <input asp-for="StartDate" class="form-control" type="date" />
+                                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="EndDate" class="form-label"></label>
+                                    <input asp-for="EndDate" class="form-control" type="date" />
+                                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                                    <div class="form-text">Leave blank for ongoing medication</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SideEffects" class="form-label"></label>
+                            <textarea asp-for="SideEffects" class="form-control" rows="3" 
+                                      placeholder="List any potential side effects or warnings for the patient..."></textarea>
+                            <span asp-validation-for="SideEffects" class="text-danger"></span>
+                        </div>
+
+                        <hr />
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="PatientDetails" asp-route-id="@Model.PatientId" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Patient
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-pills"></i> Add Medication
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a asp-action="AddTreatmentUpdate" asp-route-patientId="@Model.PatientId" class="btn btn-outline-primary w-100 mb-2">
+                                <i class="fas fa-notes-medical"></i> Add Treatment Update
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a asp-action="AddAppointment" asp-route-patientId="@Model.PatientId" class="btn btn-outline-info w-100 mb-2">
+                                <i class="fas fa-calendar-plus"></i> Schedule Appointment
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

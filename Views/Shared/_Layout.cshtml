@@ -36,6 +36,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="Patient" asp-action="Medications">Medications</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Patient" asp-action="Appointments">Appointments</a>
+                                </li>
                             }
                             else if (User.Claims.FirstOrDefault(c => c.Type == "UserType")?.Value == "Doctor")
                             {
@@ -44,6 +47,15 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="Doctor" asp-action="PatientList">Patients</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Doctor" asp-action="AssignPatient">Assign Patient</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Doctor" asp-action="AppointmentRequests">Appointment Requests</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Doctor" asp-action="MyAppointments">My Appointments</a>
                                 </li>
                             }
                         }

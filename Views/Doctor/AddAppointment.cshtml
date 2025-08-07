@@ -1,0 +1,124 @@
+@model OncoTrack.ViewModels.AddAppointmentViewModel
+@{
+    ViewData["Title"] = "Schedule Appointment";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Schedule New Appointment</h4>
+                    <p class="text-muted mb-0">Schedule an appointment for <strong>@ViewBag.PatientName</strong></p>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddAppointment" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <input type="hidden" asp-for="PatientId" />
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="AppointmentDate" class="form-label"></label>
+                                    <input asp-for="AppointmentDate" class="form-control" type="datetime-local" />
+                                    <span asp-validation-for="AppointmentDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="AppointmentType" class="form-label"></label>
+                                    <select asp-for="AppointmentType" class="form-select">
+                                        <option value="">Select appointment type...</option>
+                                        <option value="Consultation">Consultation</option>
+                                        <option value="Follow-up">Follow-up</option>
+                                        <option value="Chemotherapy">Chemotherapy</option>
+                                        <option value="Radiation Therapy">Radiation Therapy</option>
+                                        <option value="CT Scan">CT Scan</option>
+                                        <option value="MRI Scan">MRI Scan</option>
+                                        <option value="Blood Work">Blood Work</option>
+                                        <option value="Biopsy">Biopsy</option>
+                                        <option value="Surgery">Surgery</option>
+                                        <option value="Pre-op Assessment">Pre-op Assessment</option>
+                                        <option value="Post-op Check">Post-op Check</option>
+                                        <option value="Pain Management">Pain Management</option>
+                                        <option value="Nutritional Counseling">Nutritional Counseling</option>
+                                        <option value="Psychological Support">Psychological Support</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <span asp-validation-for="AppointmentType" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Status" class="form-label"></label>
+                                    <select asp-for="Status" class="form-select">
+                                        <option value="Scheduled">Scheduled</option>
+                                        <option value="Confirmed">Confirmed</option>
+                                        <option value="Tentative">Tentative</option>
+                                    </select>
+                                    <span asp-validation-for="Status" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label"></label>
+                            <textarea asp-for="Notes" class="form-control" rows="4" 
+                                      placeholder="Add any special instructions, preparation requirements, or additional information..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-info-circle"></i> Common Appointment Preparations:</h6>
+                            <ul class="mb-0">
+                                <li><strong>Chemotherapy:</strong> Ensure patient has eaten and is well-hydrated</li>
+                                <li><strong>CT/MRI Scans:</strong> May require fasting or contrast preparation</li>
+                                <li><strong>Blood Work:</strong> Usually requires fasting for 8-12 hours</li>
+                                <li><strong>Surgery:</strong> Requires pre-operative instructions and consent</li>
+                            </ul>
+                        </div>
+
+                        <hr />
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="PatientDetails" asp-route-id="@Model.PatientId" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Patient
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-calendar-plus"></i> Schedule Appointment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a asp-action="AddMedication" asp-route-patientId="@Model.PatientId" class="btn btn-outline-success w-100 mb-2">
+                                <i class="fas fa-pills"></i> Add Medication
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a asp-action="AddTreatmentUpdate" asp-route-patientId="@Model.PatientId" class="btn btn-outline-primary w-100 mb-2">
+                                <i class="fas fa-notes-medical"></i> Add Treatment Update
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

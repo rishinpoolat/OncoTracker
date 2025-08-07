@@ -1,0 +1,73 @@
+@model List<OncoTrack.Models.Medication>
+@{
+    ViewData["Title"] = "Medications";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>My Medications</h2>
+                <a href="@Url.Action("Index", "Patient")" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+
+            @if (Model.Any())
+            {
+                <div class="row">
+                    @foreach (var medication in Model)
+                    {
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">@medication.MedicationName</h5>
+                                    @if (medication.IsActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    }
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-2">
+                                        <strong>Dosage:</strong> @medication.Dosage
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Frequency:</strong> @medication.Frequency
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Start Date:</strong> @medication.StartDate.ToString("MMM dd, yyyy")
+                                    </div>
+                                    @if (medication.EndDate.HasValue)
+                                    {
+                                        <div class="mb-2">
+                                            <strong>End Date:</strong> @medication.EndDate.Value.ToString("MMM dd, yyyy")
+                                        </div>
+                                    }
+                                    <div class="mb-2">
+                                        <strong>Prescribed By:</strong> @medication.PrescribedBy
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(medication.SideEffects))
+                                    {
+                                        <div class="mb-2">
+                                            <strong>Side Effects:</strong>
+                                            <small class="text-muted d-block">@medication.SideEffects</small>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <h4>No Medications Found</h4>
+                    <p>You don't have any medications recorded yet. Your doctor will add medications to your treatment plan as needed.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

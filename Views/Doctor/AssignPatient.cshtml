@@ -1,0 +1,76 @@
+@model List<OncoTrack.Models.Patient>
+@{
+    ViewData["Title"] = "Assign Patient";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Assign Patients</h2>
+                <a href="@Url.Action("PatientList", "Doctor")" class="btn btn-secondary">Back to Patient List</a>
+            </div>
+
+            @if (Model.Any())
+            {
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-info-circle"></i> Unassigned Patients</h5>
+                    <p class="mb-0">These patients are currently not assigned to any doctor. Click "Assign to Me" to add them to your patient list.</p>
+                </div>
+
+                <div class="row">
+                    @foreach (var patient in Model)
+                    {
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="mb-0">@patient.User.FirstName @patient.User.LastName</h5>
+                                    <small class="text-muted">Patient ID: @patient.PatientId.Substring(0, 8)...</small>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-2">
+                                        <strong>Cancer Type:</strong> @patient.CancerType
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Stage:</strong> @patient.Stage
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Diagnosis Date:</strong> @patient.DiagnosisDate.ToString("MMM dd, yyyy")
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Email:</strong> @patient.User.Email
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(patient.User.PhoneNumber))
+                                    {
+                                        <div class="mb-2">
+                                            <strong>Phone:</strong> @patient.User.PhoneNumber
+                                        </div>
+                                    }
+                                </div>
+                                <div class="card-footer">
+                                    <form method="post" action="@Url.Action("AssignPatientToMe", "Doctor")">
+                                        <input type="hidden" name="patientId" value="@patient.PatientId" />
+                                        <button type="submit" class="btn btn-success w-100" 
+                                                onclick="return confirm('Are you sure you want to assign this patient to your care?');">
+                                            <i class="fas fa-user-plus"></i> Assign to Me
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-success">
+                    <h4><i class="fas fa-check-circle"></i> All Patients Assigned</h4>
+                    <p>Great! All patients in the system are currently assigned to doctors. There are no unassigned patients at this time.</p>
+                    <a href="@Url.Action("PatientList", "Doctor")" class="btn btn-primary">
+                        <i class="fas fa-users"></i> View My Patients
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

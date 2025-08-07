@@ -37,8 +37,15 @@
     </div>
     
     <div class="mb-3">
-        <a asp-action="AddTreatmentUpdate" asp-route-patientId="@Model.PatientId" class="btn btn-primary">Add Treatment Update</a>
-        <a asp-action="AddMedication" asp-route-patientId="@Model.PatientId" class="btn btn-success">Add Medication</a>
+        <a asp-action="AddTreatmentUpdate" asp-route-patientId="@Model.PatientId" class="btn btn-primary">
+            <i class="fas fa-notes-medical"></i> Add Treatment Update
+        </a>
+        <a asp-action="AddMedication" asp-route-patientId="@Model.PatientId" class="btn btn-success">
+            <i class="fas fa-pills"></i> Add Medication
+        </a>
+        <a asp-action="AddAppointment" asp-route-patientId="@Model.PatientId" class="btn btn-info">
+            <i class="fas fa-calendar-plus"></i> Schedule Appointment
+        </a>
         <a asp-action="PatientList" class="btn btn-secondary">Back to List</a>
     </div>
     

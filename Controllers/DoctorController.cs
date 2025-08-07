@@ -194,5 +194,150 @@ namespace OncoTrack.Controllers
 
             return RedirectToAction("PatientList");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AddAppointment(string patientId)
+        {
+            var patient = await _context.Patients
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.PatientId == patientId);
+
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            var model = new AddAppointmentViewModel
+            {
+                PatientId = patientId,
+                AppointmentDate = DateTime.Today.AddDays(1).AddHours(9) // Default to tomorrow at 9 AM
+            };
+
+            ViewBag.PatientName = $"{patient.User.FirstName} {patient.User.LastName}";
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAppointment(AddAppointmentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var currentUser = await _userManager.GetUserAsync(User);
+                var doctor = await _context.Doctors
+                    .FirstOrDefaultAsync(d => d.UserId == currentUser.Id);
+                    
+                var patient = await _context.Patients
+                    .FirstOrDefaultAsync(p => p.PatientId == model.PatientId);
+
+                if (doctor != null && patient != null)
+                {
+                    var appointment = new Appointment
+                    {
+                        AppointmentId = Guid.NewGuid().ToString(),
+                        PatientId = model.PatientId,
+                        Patient = patient,
+                        DoctorId = doctor.DoctorId,
+                        Doctor = doctor,
+                        AppointmentDate = model.AppointmentDate,
+                        AppointmentType = model.AppointmentType,
+                        Notes = model.Notes,
+                        Status = "Approved", // Doctor-created appointments are auto-approved
+                        DoctorName = $"Dr. {currentUser.FirstName} {currentUser.LastName}"
+                    };
+
+                    _context.Appointments.Add(appointment);
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction("PatientDetails", new { id = model.PatientId });
+            }
+
+            // If we got this far, something failed, redisplay form
+            var patientForView = await _context.Patients
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.PatientId == model.PatientId);
+
+            if (patientForView != null)
+            {
+                ViewBag.PatientName = $"{patientForView.User.FirstName} {patientForView.User.LastName}";
+            }
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> AppointmentRequests()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var doctor = await _context.Doctors
+                .FirstOrDefaultAsync(d => d.UserId == currentUser.Id);
+
+            if (doctor == null)
+            {
+                return NotFound();
+            }
+
+            var pendingAppointments = await _context.Appointments
+                .Include(a => a.Patient)
+                    .ThenInclude(p => p.User)
+                .Where(a => a.DoctorId == doctor.DoctorId && a.Status == "Pending")
+                .OrderBy(a => a.AppointmentDate)
+                .ToListAsync();
+
+            return View(pendingAppointments);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApproveAppointment(string appointmentId)
+        {
+            var appointment = await _context.Appointments
+                .FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
+
+            if (appointment != null)
+            {
+                appointment.Status = "Approved";
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Appointment approved successfully.";
+            }
+
+            return RedirectToAction("AppointmentRequests");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RejectAppointment(string appointmentId)
+        {
+            var appointment = await _context.Appointments
+                .FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
+
+            if (appointment != null)
+            {
+                appointment.Status = "Rejected";
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Appointment rejected.";
+            }
+
+            return RedirectToAction("AppointmentRequests");
+        }
+
+        public async Task<IActionResult> MyAppointments()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var doctor = await _context.Doctors
+                .FirstOrDefaultAsync(d => d.UserId == currentUser.Id);
+
+            if (doctor == null)
+            {
+                return NotFound();
+            }
+
+            var appointments = await _context.Appointments
+                .Include(a => a.Patient)
+                    .ThenInclude(p => p.User)
+                .Where(a => a.DoctorId == doctor.DoctorId && a.Status == "Approved")
+                .OrderBy(a => a.AppointmentDate)
+                .ToListAsync();
+
+            return View(appointments);
+        }
     }
 }
