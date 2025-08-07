@@ -1,80 +1,275 @@
 @model OncoTrack.ViewModels.DoctorDashboardViewModel
 @{
-    ViewData["Title"] = "Doctor Dashboard";
+    ViewData["Title"] = "Doctor Dashboard - OncoTracker";
 }
 
-<div class="container mt-4">
-    <h2>Welcome, @Model.DoctorName</h2>
-    <p class="text-muted">@Model.Specialization</p>
-    
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <h5>Total Patients</h5>
-                    <p class="h2">@Model.TotalPatients</p>
+<!-- Hero Section -->
+<div class="doctor-hero bg-gradient-primary text-white py-5 mb-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-5 fw-bold mb-3">Welcome back, Dr. @Model.DoctorName!</h1>
+                <p class="lead mb-0">@Model.Specialization • Today's patient care overview and activities.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="dashboard-icon">
+                    <i class="fas fa-user-md" style="font-size: 6rem; opacity: 0.8;"></i>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <h5>Appointments Today</h5>
-                    <p class="h2">@Model.AppointmentsToday</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-info text-white">
-                <div class="card-body">
-                    <h5>Quick Actions</h5>
-                    <a asp-action="PatientList" class="btn btn-light btn-sm">View All Patients</a>
-                    <a asp-action="AssignPatient" class="btn btn-light btn-sm mt-2">Assign New Patient</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="card mt-4">
-        <div class="card-header">
-            <h5>My Patients</h5>
-        </div>
-        <div class="card-body">
-            @if (Model.Patients.Any())
-            {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Patient Name</th>
-                            <th>Cancer Type</th>
-                            <th>Stage</th>
-                            <th>Diagnosis Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var patient in Model.Patients.Take(10))
-                        {
-                            <tr>
-                                <td>@patient.User.FirstName @patient.User.LastName</td>
-                                <td>@patient.CancerType</td>
-                                <td>@patient.Stage</td>
-                                <td>@patient.DiagnosisDate.ToString("MMM dd, yyyy")</td>
-                                <td>
-                                    <a asp-action="PatientDetails" asp-route-id="@patient.PatientId" 
-                                       class="btn btn-sm btn-primary">View Details</a>
-                                    <a asp-action="AddTreatmentUpdate" asp-route-patientId="@patient.PatientId" 
-                                       class="btn btn-sm btn-success">Add Update</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <p>No patients assigned yet. <a asp-action="AssignPatient">Assign a patient</a></p>
-            }
         </div>
     </div>
 </div>
+
+<div class="container">
+    <!-- Quick Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center p-4 border-0 shadow-sm rounded-lg">
+                <div class="stat-icon mb-3">
+                    <i class="fas fa-users text-primary" style="font-size: 2.5rem;"></i>
+                </div>
+                <h6 class="text-muted mb-2">Total Patients</h6>
+                <h4 class="fw-bold text-primary mb-1">@Model.TotalPatients</h4>
+                <small class="text-muted">Under your care</small>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center p-4 border-0 shadow-sm rounded-lg">
+                <div class="stat-icon mb-3">
+                    <i class="fas fa-calendar-day text-success" style="font-size: 2.5rem;"></i>
+                </div>
+                <h6 class="text-muted mb-2">Today's Schedule</h6>
+                <h4 class="fw-bold text-success mb-1">@Model.AppointmentsToday</h4>
+                <small class="text-muted">
+                    @if (Model.AppointmentsToday > 0)
+                    {
+                        <a asp-action="MyAppointments" class="text-decoration-none">View Schedule</a>
+                    }
+                    else
+                    {
+                        <span>No appointments</span>
+                    }
+                </small>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center p-4 border-0 shadow-sm rounded-lg">
+                <div class="stat-icon mb-3">
+                    <i class="fas fa-clock text-warning" style="font-size: 2.5rem;"></i>
+                </div>
+                <h6 class="text-muted mb-2">Pending Requests</h6>
+                <h4 class="fw-bold text-warning mb-1">@Model.PendingRequests</h4>
+                <small class="text-muted">
+                    @if (Model.PendingRequests > 0)
+                    {
+                        <a asp-action="AppointmentRequests" class="text-decoration-none">Review Now</a>
+                    }
+                    else
+                    {
+                        <span>All caught up!</span>
+                    }
+                </small>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center p-4 border-0 shadow-sm rounded-lg">
+                <div class="stat-icon mb-3">
+                    <i class="fas fa-stethoscope text-info" style="font-size: 2.5rem;"></i>
+                </div>
+                <h6 class="text-muted mb-2">Specialization</h6>
+                <h4 class="fw-bold text-info mb-1">Oncology</h4>
+                <small class="text-muted">@Model.Specialization</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="quick-actions-card p-4 border-0 shadow-sm rounded-lg bg-light">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-bolt text-warning me-2"></i>Quick Actions
+                </h5>
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="@Url.Action("MyAppointments", "Doctor")" class="btn btn-primary w-100 btn-action">
+                            <i class="fas fa-calendar me-2"></i>My Appointments
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="@Url.Action("AppointmentRequests", "Doctor")" class="btn btn-outline-warning w-100 btn-action">
+                            <i class="fas fa-clock me-2"></i>Pending Requests
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="@Url.Action("PatientList", "Doctor")" class="btn btn-outline-primary w-100 btn-action">
+                            <i class="fas fa-users me-2"></i>All Patients
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="@Url.Action("AssignPatient", "Doctor")" class="btn btn-outline-success w-100 btn-action">
+                            <i class="fas fa-user-plus me-2"></i>Assign Patient
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Patients Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="content-card border-0 shadow-sm rounded-lg">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">
+                            <i class="fas fa-users text-primary me-2"></i>My Patients
+                        </h5>
+                        <div class="header-actions">
+                            <a asp-action="PatientList" class="btn btn-primary btn-sm me-2">
+                                <i class="fas fa-eye me-1"></i>View All (@Model.TotalPatients)
+                            </a>
+                            <a asp-action="AssignPatient" class="btn btn-success btn-sm">
+                                <i class="fas fa-plus me-1"></i>Assign New
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model.Patients.Any())
+                    {
+                        <div class="patients-grid">
+                            @foreach (var patient in Model.Patients.Take(6))
+                            {
+                                <div class="patient-card p-3 border rounded mb-3">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-3">
+                                            <div class="patient-info">
+                                                <h6 class="fw-bold mb-1">@patient.User.FirstName @patient.User.LastName</h6>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-envelope me-1"></i>@patient.User.Email
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="medical-info">
+                                                <span class="badge bg-info-subtle text-info px-3 py-2 mb-1">@patient.CancerType</span>
+                                                <div class="small text-muted">
+                                                    <i class="fas fa-layer-group me-1"></i>Stage @patient.Stage
+                                                    <span class="mx-2">•</span>
+                                                    <i class="fas fa-calendar me-1"></i>@patient.DiagnosisDate.ToString("MMM yyyy")
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5 text-end">
+                                            <div class="patient-actions">
+                                                <a asp-action="PatientDetails" asp-route-id="@patient.PatientId" 
+                                                   class="btn btn-outline-primary btn-sm me-1">
+                                                    <i class="fas fa-user me-1"></i>Details
+                                                </a>
+                                                <a asp-action="AddTreatmentUpdate" asp-route-patientId="@patient.PatientId" 
+                                                   class="btn btn-success btn-sm me-1">
+                                                    <i class="fas fa-notes-medical me-1"></i>Add Update
+                                                </a>
+                                                <a asp-action="AddMedication" asp-route-patientId="@patient.PatientId" 
+                                                   class="btn btn-outline-success btn-sm">
+                                                    <i class="fas fa-pills me-1"></i>Medication
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        
+                        @if (Model.Patients.Count > 6)
+                        {
+                            <div class="text-center mt-4">
+                                <a asp-action="PatientList" class="btn btn-outline-primary">
+                                    <i class="fas fa-eye me-2"></i>View All @Model.TotalPatients Patients
+                                </a>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-user-plus text-muted mb-3" style="font-size: 3rem;"></i>
+                            <h5 class="text-muted mb-3">No patients assigned yet</h5>
+                            <p class="text-muted mb-4">Start building your patient roster by assigning patients to your care.</p>
+                            <a asp-action="AssignPatient" class="btn btn-primary">
+                                <i class="fas fa-user-plus me-2"></i>Assign Your First Patient
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .doctor-hero {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stat-card, .content-card, .quick-actions-card {
+        background: white;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    }
+    
+    .btn-action {
+        border-radius: 25px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-action:hover {
+        transform: translateY(-1px);
+    }
+    
+    .patient-card {
+        background: #f8f9fa;
+        border-color: #e9ecef !important;
+        transition: all 0.2s ease;
+    }
+    
+    .patient-card:hover {
+        background: white;
+        border-color: #007bff !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .rounded-lg {
+        border-radius: 15px !important;
+    }
+    
+    .bg-info-subtle {
+        background-color: rgba(13, 202, 240, 0.1) !important;
+    }
+    
+    .header-actions .btn {
+        border-radius: 20px;
+        font-weight: 500;
+    }
+    
+    .patient-actions .btn {
+        border-radius: 15px;
+        font-size: 0.875rem;
+    }
+    
+    .medical-info .badge {
+        font-size: 0.75rem;
+        border-radius: 12px;
+    }
+</style>

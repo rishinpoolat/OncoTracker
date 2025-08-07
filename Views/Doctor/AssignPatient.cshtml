@@ -48,10 +48,10 @@
                                     }
                                 </div>
                                 <div class="card-footer">
-                                    <form method="post" action="@Url.Action("AssignPatientToMe", "Doctor")">
+                                    <form id="assignForm_@patient.PatientId" method="post" action="@Url.Action("AssignPatientToMe", "Doctor")">
                                         <input type="hidden" name="patientId" value="@patient.PatientId" />
-                                        <button type="submit" class="btn btn-success w-100" 
-                                                onclick="return confirm('Are you sure you want to assign this patient to your care?');">
+                                        <button type="button" class="btn btn-success w-100" 
+                                                onclick="DialogUtil.showConfirm('Are you sure you want to assign this patient to your care?', function() { document.getElementById('assignForm_@patient.PatientId').submit(); })">
                                             <i class="fas fa-user-plus"></i> Assign to Me
                                         </button>
                                     </form>

@@ -1,8 +1,231 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "OncoTracker - Cancer Care Management System";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Hero Section -->
+<section class="hero-section bg-gradient-primary text-white">
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <h1 class="display-3 fw-bold mb-4">OncoTracker</h1>
+                    <p class="lead mb-4">
+                        A comprehensive cancer care management system that connects patients with their healthcare providers, 
+                        streamlines appointment scheduling, tracks treatment progress, and manages medications effectively.
+                    </p>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.Claims.FirstOrDefault(c => c.Type == "UserType")?.Value == "Patient")
+                        {
+                            <a href="@Url.Action("Index", "Patient")" class="btn btn-light btn-lg me-3">
+                                <i class="fas fa-tachometer-alt me-2"></i>Patient Dashboard
+                            </a>
+                        }
+                        else if (User.Claims.FirstOrDefault(c => c.Type == "UserType")?.Value == "Doctor")
+                        {
+                            <a href="@Url.Action("Index", "Doctor")" class="btn btn-light btn-lg me-3">
+                                <i class="fas fa-stethoscope me-2"></i>Doctor Dashboard
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Account")" class="btn btn-light btn-lg me-3">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                        <a href="@Url.Action("Register", "Account")" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Register
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image">
+                    <i class="fas fa-heartbeat" style="font-size: 15rem; opacity: 0.8;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="display-5 fw-bold text-primary mb-3">Comprehensive Care Management</h2>
+                <p class="lead text-muted">Everything you need for effective cancer care coordination</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card text-center p-4 h-100 border rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-calendar-check text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Smart Scheduling</h4>
+                    <p class="text-muted">
+                        Easy appointment booking with automatic conflict detection and doctor approval system.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card text-center p-4 h-100 border rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-pills text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Medication Management</h4>
+                    <p class="text-muted">
+                        Track prescriptions, dosages, and side effects with comprehensive medication history.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card text-center p-4 h-100 border rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-chart-line text-info" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Treatment Tracking</h4>
+                    <p class="text-muted">
+                        Monitor treatment progress, updates, and milestones throughout the care journey.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card text-center p-4 h-100 border rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-user-md text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Doctor-Patient Connect</h4>
+                    <p class="text-muted">
+                        Seamless communication between healthcare providers and patients.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section bg-light py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <i class="fas fa-users text-primary mb-3" style="font-size: 2rem;"></i>
+                    <h3 class="fw-bold text-primary">24/7</h3>
+                    <p class="text-muted">System Availability</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <i class="fas fa-shield-alt text-success mb-3" style="font-size: 2rem;"></i>
+                    <h3 class="fw-bold text-success">100%</h3>
+                    <p class="text-muted">HIPAA Compliant</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <i class="fas fa-clock text-info mb-3" style="font-size: 2rem;"></i>
+                    <h3 class="fw-bold text-info">Real-time</h3>
+                    <p class="text-muted">Updates & Notifications</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <i class="fas fa-mobile-alt text-warning mb-3" style="font-size: 2rem;"></i>
+                    <h3 class="fw-bold text-warning">Mobile</h3>
+                    <p class="text-muted">Responsive Design</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+@if (!User.Identity.IsAuthenticated)
+{
+    <section class="cta-section bg-primary text-white py-5">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="display-6 fw-bold mb-4">Ready to Get Started?</h2>
+                    <p class="lead mb-4">
+                        Join OncoTracker today and experience streamlined cancer care management.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="@Url.Action("Register", "Account")" class="btn btn-light btn-lg me-3">
+                            <i class="fas fa-user-plus me-2"></i>Register Now
+                        </a>
+                        <a href="#features" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-info-circle me-2"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .min-vh-75 {
+        min-height: 75vh;
+    }
+    
+    .hero-section {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.1);
+        z-index: 1;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .feature-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: white;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+    }
+    
+    .hero-image i {
+        animation: pulse 2s infinite;
+    }
+    
+    @@keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    
+    .stat-item {
+        padding: 2rem 1rem;
+    }
+    
+    .features-section, .stats-section, .cta-section {
+        position: relative;
+    }
+</style>

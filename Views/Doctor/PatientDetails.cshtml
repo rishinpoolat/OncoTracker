@@ -121,11 +121,11 @@
                                         </a>
                                         @if (med.IsActive)
                                         {
-                                            <form asp-action="DeactivateMedication" method="post" class="d-inline">
+                                            <form id="deactivateForm_@med.MedicationId" asp-action="DeactivateMedication" method="post" class="d-inline">
                                                 <input type="hidden" name="medicationId" value="@med.MedicationId" />
-                                                <button type="submit" 
+                                                <button type="button" 
                                                         class="btn btn-danger btn-sm w-100" 
-                                                        onclick="return confirm('Are you sure you want to deactivate this medication?')">
+                                                        onclick="DialogUtil.showConfirm('Are you sure you want to deactivate this medication?', function() { document.getElementById('deactivateForm_@med.MedicationId').submit(); })">
                                                     <i class="fas fa-stop"></i> Stop
                                                 </button>
                                             </form>

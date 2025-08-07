@@ -50,7 +50,9 @@ namespace OncoTrack.Controllers
                 AppointmentsToday = await _context.Appointments
                     .CountAsync(a => a.DoctorId == doctor.DoctorId 
                         && a.AppointmentDate.Date == DateTime.Today 
-                        && a.Status == "Approved")
+                        && a.Status == "Approved"),
+                PendingRequests = await _context.Appointments
+                    .CountAsync(a => a.DoctorId == doctor.DoctorId && a.Status == "Pending")
             };
 
             return View(viewModel);

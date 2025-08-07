@@ -1,147 +1,401 @@
 @model OncoTrack.ViewModels.PatientDashboardViewModel
 @{
-    ViewData["Title"] = "Patient Dashboard";
+    ViewData["Title"] = "Patient Dashboard - OncoTracker";
 }
 
-<div class="container mt-4">
-    <h2>Welcome, @Model.PatientName</h2>
-    
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card bg-info text-white">
-                <div class="card-body">
-                    <h5>Cancer Type</h5>
-                    <p class="h4">@Model.CancerType</p>
-                    <p>Stage: @Model.Stage</p>
+<!-- Hero Section -->
+<div class="patient-hero bg-gradient-primary text-white py-5 mb-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-5 fw-bold mb-3">Welcome back, @Model.PatientName!</h1>
+                <p class="lead mb-0">Here's your personalized health overview and upcoming activities.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="dashboard-icon">
+                    <i class="fas fa-user-circle" style="font-size: 6rem; opacity: 0.8;"></i>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <h5>Diagnosis Date</h5>
-                    <p class="h4">@Model.DiagnosisDate.ToString("MMM dd, yyyy")</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Quick Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center p-4 border-0 shadow-sm rounded-lg">
+                <div class="stat-icon mb-3">
+                    <i class="fas fa-microscope text-info" style="font-size: 2.5rem;"></i>
                 </div>
+                <h6 class="text-muted mb-2">Cancer Type</h6>
+                <h4 class="fw-bold text-primary mb-1">@Model.CancerType</h4>
+                <small class="text-muted">Stage @Model.Stage</small>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <h5>Assigned Doctor</h5>
-                    <p class="h4">@Model.DoctorName</p>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center p-4 border-0 shadow-sm rounded-lg">
+                <div class="stat-icon mb-3">
+                    <i class="fas fa-calendar-alt text-success" style="font-size: 2.5rem;"></i>
+                </div>
+                <h6 class="text-muted mb-2">Diagnosis Date</h6>
+                <h4 class="fw-bold text-success mb-1">@Model.DiagnosisDate.ToString("MMM dd")</h4>
+                <small class="text-muted">@Model.DiagnosisDate.Year</small>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center p-4 border-0 shadow-sm rounded-lg">
+                <div class="stat-icon mb-3">
+                    <i class="fas fa-user-md text-primary" style="font-size: 2.5rem;"></i>
+                </div>
+                <h6 class="text-muted mb-2">Assigned Doctor</h6>
+                <h4 class="fw-bold text-primary mb-1">@Model.DoctorName?.Split(' ').FirstOrDefault()</h4>
+                <small class="text-muted">@(Model.DoctorName?.Contains(' ') == true ? string.Join(" ", Model.DoctorName.Split(' ').Skip(1)) : "")</small>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center p-4 border-0 shadow-sm rounded-lg">
+                <div class="stat-icon mb-3">
+                    <i class="fas fa-calendar-check text-warning" style="font-size: 2.5rem;"></i>
+                </div>
+                <h6 class="text-muted mb-2">Next Appointment</h6>
+                <h4 class="fw-bold text-warning mb-1">
+                    @if (Model.UpcomingAppointments?.Any() == true)
+                    {
+                        @Model.UpcomingAppointments.First().AppointmentDate.ToString("MMM dd")
+                    }
+                    else
+                    {
+                        <span class="text-muted fs-6">None</span>
+                    }
+                </h4>
+                <small class="text-muted">
+                    @if (Model.UpcomingAppointments?.Any() == true)
+                    {
+                        @Model.UpcomingAppointments.First().AppointmentDate.ToString("hh:mm tt")
+                    }
+                    else
+                    {
+                        <a asp-action="BookAppointment" class="text-decoration-none">Book Now</a>
+                    }
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="quick-actions-card p-4 border-0 shadow-sm rounded-lg bg-light">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-bolt text-warning me-2"></i>Quick Actions
+                </h5>
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="@Url.Action("BookAppointment", "Patient")" class="btn btn-primary w-100 btn-action">
+                            <i class="fas fa-calendar-plus me-2"></i>Book Appointment
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="@Url.Action("Appointments", "Patient")" class="btn btn-outline-primary w-100 btn-action">
+                            <i class="fas fa-calendar me-2"></i>My Appointments
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="@Url.Action("Medications", "Patient")" class="btn btn-outline-success w-100 btn-action">
+                            <i class="fas fa-pills me-2"></i>Medications
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="@Url.Action("TreatmentHistory", "Patient")" class="btn btn-outline-info w-100 btn-action">
+                            <i class="fas fa-history me-2"></i>Treatment History
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Recent Treatment Updates</h5>
+    <!-- Content Sections -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="content-card border-0 shadow-sm rounded-lg h-100">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <h5 class="fw-bold mb-0">
+                        <i class="fas fa-clipboard-list text-info me-2"></i>Recent Treatment Updates
+                    </h5>
                 </div>
                 <div class="card-body">
-                    @if (Model.RecentUpdates.Any())
+                    @if (Model.RecentUpdates?.Any() == true)
                     {
-                        <div class="list-group">
-                            @foreach (var update in Model.RecentUpdates)
+                        <div class="timeline">
+                            @foreach (var update in Model.RecentUpdates.Take(3))
                             {
-                                <div class="list-group-item">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6>@update.UpdateType</h6>
-                                        <small>@update.UpdateDate.ToString("MMM dd, yyyy")</small>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker bg-info"></div>
+                                    <div class="timeline-content">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h6 class="fw-bold mb-1">@update.UpdateType</h6>
+                                            <small class="text-muted">@update.UpdateDate.ToString("MMM dd")</small>
+                                        </div>
+                                        <p class="text-muted mb-2">@update.Description</p>
+                                        @if (!string.IsNullOrEmpty(update.Notes))
+                                        {
+                                            <small class="text-muted">Notes: @update.Notes</small><br/>
+                                        }
+                                        <small class="text-info fw-semibold">By @update.CreatedBy</small>
                                     </div>
-                                    <p class="mb-1">@update.Description</p>
-                                    @if (!string.IsNullOrEmpty(update.Notes))
-                                    {
-                                        <small class="text-muted">Notes: @update.Notes</small><br/>
-                                    }
-                                    <small class="text-muted">By @update.CreatedBy</small>
                                 </div>
                             }
                         </div>
                     }
                     else
                     {
-                        <p>No recent updates.</p>
+                        <div class="text-center py-4">
+                            <i class="fas fa-clipboard text-muted mb-3" style="font-size: 2rem;"></i>
+                            <p class="text-muted">No recent updates available.</p>
+                        </div>
                     }
-                    <a asp-action="TreatmentHistory" class="btn btn-sm btn-primary mt-3">View All Updates</a>
+                    <div class="text-center mt-3">
+                        <a asp-action="TreatmentHistory" class="btn btn-outline-info">
+                            <i class="fas fa-eye me-2"></i>View All Updates
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Active Medications</h5>
+        <div class="col-lg-6 mb-4">
+            <div class="content-card border-0 shadow-sm rounded-lg h-100">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <h5 class="fw-bold mb-0">
+                        <i class="fas fa-pills text-success me-2"></i>Active Medications
+                    </h5>
                 </div>
                 <div class="card-body">
-                    @if (Model.ActiveMedications.Any())
+                    @if (Model.ActiveMedications?.Any() == true)
                     {
-                        <ul class="list-group">
-                            @foreach (var med in Model.ActiveMedications)
+                        <div class="medication-list">
+                            @foreach (var med in Model.ActiveMedications.Take(4))
                             {
-                                <li class="list-group-item">
-                                    <strong>@med.MedicationName</strong><br/>
-                                    Dosage: @med.Dosage | Frequency: @med.Frequency
-                                    @if (!string.IsNullOrEmpty(med.SideEffects))
-                                    {
-                                        <br/><small class="text-warning">Side Effects: @med.SideEffects</small>
-                                    }
-                                </li>
+                                <div class="medication-item p-3 mb-3 border rounded">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="fw-bold text-success mb-1">@med.MedicationName</h6>
+                                        <span class="badge bg-success-subtle text-success">Active</span>
+                                    </div>
+                                    <div class="medication-details">
+                                        <small class="d-block text-muted mb-1">
+                                            <i class="fas fa-capsules me-1"></i>@med.Dosage | @med.Frequency
+                                        </small>
+                                        @if (!string.IsNullOrEmpty(med.SideEffects))
+                                        {
+                                            <small class="d-block text-warning">
+                                                <i class="fas fa-exclamation-triangle me-1"></i>Side Effects: @med.SideEffects
+                                            </small>
+                                        }
+                                    </div>
+                                </div>
                             }
-                        </ul>
+                        </div>
                     }
                     else
                     {
-                        <p>No active medications.</p>
+                        <div class="text-center py-4">
+                            <i class="fas fa-pills text-muted mb-3" style="font-size: 2rem;"></i>
+                            <p class="text-muted">No active medications.</p>
+                        </div>
                     }
-                    <a asp-action="Medications" class="btn btn-sm btn-primary mt-3">View All Medications</a>
+                    <div class="text-center mt-3">
+                        <a asp-action="Medications" class="btn btn-outline-success">
+                            <i class="fas fa-eye me-2"></i>View All Medications
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Upcoming Appointments</h5>
+    <!-- Upcoming Appointments Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="content-card border-0 shadow-sm rounded-lg">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">
+                            <i class="fas fa-calendar-check text-primary me-2"></i>Upcoming Appointments
+                        </h5>
+                        <a asp-action="BookAppointment" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus me-1"></i>Book New
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
-                    @if (Model.UpcomingAppointments.Any())
+                    @if (Model.UpcomingAppointments?.Any() == true)
                     {
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Type</th>
-                                    <th>Doctor</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var appt in Model.UpcomingAppointments)
-                                {
-                                    <tr>
-                                        <td>@appt.AppointmentDate.ToString("MMM dd, yyyy")</td>
-                                        <td>@appt.AppointmentDate.ToString("hh:mm tt")</td>
-                                        <td>@appt.AppointmentType</td>
-                                        <td>@appt.DoctorName</td>
-                                        <td><span class="badge bg-success">@appt.Status</span></td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                        <div class="appointments-grid">
+                            @foreach (var appt in Model.UpcomingAppointments.Take(3))
+                            {
+                                <div class="appointment-card p-3 border rounded mb-3">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-3">
+                                            <div class="appointment-date text-center">
+                                                <div class="date-day fw-bold text-primary">@appt.AppointmentDate.ToString("dd")</div>
+                                                <div class="date-month text-muted">@appt.AppointmentDate.ToString("MMM yyyy")</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="fw-bold mb-1">@appt.AppointmentType</h6>
+                                            <p class="text-muted mb-1">
+                                                <i class="fas fa-clock me-1"></i>@appt.AppointmentDate.ToString("hh:mm tt")
+                                            </p>
+                                            <p class="text-muted mb-0">
+                                                <i class="fas fa-user-md me-1"></i>@appt.DoctorName
+                                            </p>
+                                        </div>
+                                        <div class="col-md-3 text-end">
+                                            @if (appt.Status == "Approved")
+                                            {
+                                                <span class="badge bg-success px-3 py-2">@appt.Status</span>
+                                            }
+                                            else if (appt.Status == "Pending")
+                                            {
+                                                <span class="badge bg-warning px-3 py-2">@appt.Status</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary px-3 py-2">@appt.Status</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     }
                     else
                     {
-                        <p>No upcoming appointments.</p>
+                        <div class="text-center py-5">
+                            <i class="fas fa-calendar-times text-muted mb-3" style="font-size: 3rem;"></i>
+                            <h5 class="text-muted mb-3">No upcoming appointments</h5>
+                            <p class="text-muted mb-4">Schedule your next appointment with your doctor.</p>
+                            <a asp-action="BookAppointment" class="btn btn-primary">
+                                <i class="fas fa-calendar-plus me-2"></i>Book Appointment
+                            </a>
+                        </div>
                     }
-                    <a asp-action="Appointments" class="btn btn-sm btn-primary">View All Appointments</a>
+                    @if (Model.UpcomingAppointments?.Count > 3)
+                    {
+                        <div class="text-center mt-3">
+                            <a asp-action="Appointments" class="btn btn-outline-primary">
+                                <i class="fas fa-eye me-2"></i>View All Appointments
+                            </a>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .patient-hero {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stat-card, .content-card, .quick-actions-card {
+        background: white;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    }
+    
+    .btn-action {
+        border-radius: 25px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-action:hover {
+        transform: translateY(-1px);
+    }
+    
+    .timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+    
+    .timeline-item {
+        position: relative;
+        padding-bottom: 20px;
+    }
+    
+    .timeline-item:not(:last-child)::before {
+        content: '';
+        position: absolute;
+        left: -21px;
+        top: 20px;
+        bottom: -20px;
+        width: 2px;
+        background: #e9ecef;
+    }
+    
+    .timeline-marker {
+        position: absolute;
+        left: -25px;
+        top: 5px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 2px solid white;
+        box-shadow: 0 0 0 2px #17a2b8;
+    }
+    
+    .medication-item {
+        background: #f8f9fa;
+        border-color: #e9ecef !important;
+        transition: all 0.2s ease;
+    }
+    
+    .medication-item:hover {
+        background: #e9ecef;
+        border-color: #28a745 !important;
+    }
+    
+    .appointment-card {
+        background: #f8f9fa;
+        border-color: #e9ecef !important;
+        transition: all 0.2s ease;
+    }
+    
+    .appointment-card:hover {
+        background: white;
+        border-color: #007bff !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .date-day {
+        font-size: 1.5rem;
+        line-height: 1;
+    }
+    
+    .date-month {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .rounded-lg {
+        border-radius: 15px !important;
+    }
+    
+    .bg-success-subtle {
+        background-color: rgba(25, 135, 84, 0.1) !important;
+    }
+</style>

@@ -1,0 +1,198 @@
+@using System.Text.Encodings.Web
+
+<!-- Success Dialog Modal -->
+<div class="modal fade" id="successDialog" tabindex="-1" aria-labelledby="successDialogLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-success text-white border-0">
+                <h5 class="modal-title" id="successDialogLabel">
+                    <i class="fas fa-check-circle me-2"></i>Success
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <div class="text-center">
+                    <i class="fas fa-check-circle text-success mb-3" style="font-size: 3rem;"></i>
+                    <p id="successMessage" class="mb-0 fs-5"></p>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-success px-4" data-bs-dismiss="modal">
+                    <i class="fas fa-thumbs-up me-2"></i>OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Dialog Modal -->
+<div class="modal fade" id="errorDialog" tabindex="-1" aria-labelledby="errorDialogLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-danger text-white border-0">
+                <h5 class="modal-title" id="errorDialogLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Error
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <div class="text-center">
+                    <i class="fas fa-exclamation-triangle text-danger mb-3" style="font-size: 3rem;"></i>
+                    <p id="errorMessage" class="mb-0 fs-5"></p>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-danger px-4" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Warning Dialog Modal -->
+<div class="modal fade" id="warningDialog" tabindex="-1" aria-labelledby="warningDialogLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-warning text-dark border-0">
+                <h5 class="modal-title" id="warningDialogLabel">
+                    <i class="fas fa-exclamation-circle me-2"></i>Warning
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <div class="text-center">
+                    <i class="fas fa-exclamation-circle text-warning mb-3" style="font-size: 3rem;"></i>
+                    <p id="warningMessage" class="mb-0 fs-5"></p>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-warning px-4" data-bs-dismiss="modal">
+                    <i class="fas fa-check me-2"></i>OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Dialog Modal -->
+<div class="modal fade" id="confirmDialog" tabindex="-1" aria-labelledby="confirmDialogLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-primary text-white border-0">
+                <h5 class="modal-title" id="confirmDialogLabel">
+                    <i class="fas fa-question-circle me-2"></i>Confirmation
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <div class="text-center">
+                    <i class="fas fa-question-circle text-primary mb-3" style="font-size: 3rem;"></i>
+                    <p id="confirmMessage" class="mb-0 fs-5"></p>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancel
+                </button>
+                <button type="button" id="confirmButton" class="btn btn-primary">
+                    <i class="fas fa-check me-2"></i>Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Dialog utility functions
+    window.DialogUtil = {
+        showSuccess: function(message) {
+            document.getElementById('successMessage').textContent = message;
+            new bootstrap.Modal(document.getElementById('successDialog')).show();
+        },
+        
+        showError: function(message) {
+            document.getElementById('errorMessage').textContent = message;
+            new bootstrap.Modal(document.getElementById('errorDialog')).show();
+        },
+        
+        showWarning: function(message) {
+            document.getElementById('warningMessage').textContent = message;
+            new bootstrap.Modal(document.getElementById('warningDialog')).show();
+        },
+        
+        showConfirm: function(message, callback) {
+            document.getElementById('confirmMessage').textContent = message;
+            const confirmButton = document.getElementById('confirmButton');
+            
+            // Remove existing click handlers
+            const newConfirmButton = confirmButton.cloneNode(true);
+            confirmButton.parentNode.replaceChild(newConfirmButton, confirmButton);
+            
+            // Add new click handler
+            newConfirmButton.addEventListener('click', function() {
+                bootstrap.Modal.getInstance(document.getElementById('confirmDialog')).hide();
+                if (callback) callback();
+            });
+            
+            new bootstrap.Modal(document.getElementById('confirmDialog')).show();
+        }
+    };
+    
+    // Auto-show dialogs based on TempData
+    document.addEventListener('DOMContentLoaded', function() {
+        @if (TempData["Success"] != null)
+        {
+            <text>DialogUtil.showSuccess('@Html.Raw(JavaScriptEncoder.Default.Encode(TempData["Success"]?.ToString() ?? ""))');</text>
+        }
+        
+        @if (TempData["Error"] != null)
+        {
+            <text>DialogUtil.showError('@Html.Raw(JavaScriptEncoder.Default.Encode(TempData["Error"]?.ToString() ?? ""))');</text>
+        }
+        
+        @if (TempData["Warning"] != null)
+        {
+            <text>DialogUtil.showWarning('@Html.Raw(JavaScriptEncoder.Default.Encode(TempData["Warning"]?.ToString() ?? ""))');</text>
+        }
+    });
+</script>
+
+<style>
+    .modal-content {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    .modal-header {
+        padding: 1.5rem 2rem;
+    }
+    
+    .modal-body {
+        padding: 2rem;
+    }
+    
+    .modal-footer {
+        padding: 1.5rem 2rem;
+    }
+    
+    .btn {
+        border-radius: 25px;
+        font-weight: 500;
+    }
+    
+    @@keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    .modal.show .modal-dialog {
+        animation: modalFadeIn 0.3s ease-out;
+    }
+</style>

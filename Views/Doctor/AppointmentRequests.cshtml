@@ -15,14 +15,6 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    @if (TempData["Success"] != null)
-                    {
-                        <div class="alert alert-success alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <i class="fas fa-check-circle mr-2"></i>
-                            @TempData["Success"]
-                        </div>
-                    }
 
                     @if (Model.Any())
                     {
@@ -72,20 +64,20 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group" role="group">
-                                                    <form asp-action="ApproveAppointment" method="post" style="display: inline;">
+                                                    <form id="approveForm_@appointment.AppointmentId" asp-action="ApproveAppointment" method="post" style="display: inline;">
                                                         <input type="hidden" name="appointmentId" value="@appointment.AppointmentId" />
-                                                        <button type="submit" 
+                                                        <button type="button" 
                                                                 class="btn btn-success btn-sm" 
-                                                                onclick="return confirm('Are you sure you want to approve this appointment?')">
+                                                                onclick="DialogUtil.showConfirm('Are you sure you want to approve this appointment?', function() { document.getElementById('approveForm_@appointment.AppointmentId').submit(); })">
                                                             <i class="fas fa-check mr-1"></i>
                                                             Approve
                                                         </button>
                                                     </form>
-                                                    <form asp-action="RejectAppointment" method="post" style="display: inline;">
+                                                    <form id="rejectForm_@appointment.AppointmentId" asp-action="RejectAppointment" method="post" style="display: inline;">
                                                         <input type="hidden" name="appointmentId" value="@appointment.AppointmentId" />
-                                                        <button type="submit" 
+                                                        <button type="button" 
                                                                 class="btn btn-danger btn-sm" 
-                                                                onclick="return confirm('Are you sure you want to reject this appointment?')">
+                                                                onclick="DialogUtil.showConfirm('Are you sure you want to reject this appointment?', function() { document.getElementById('rejectForm_@appointment.AppointmentId').submit(); })">
                                                             <i class="fas fa-times mr-1"></i>
                                                             Reject
                                                         </button>
