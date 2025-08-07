@@ -3290,11 +3290,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/OncoTrack.csproj",
+      "projectUniqueName": "/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/OncoTrack.csproj",
       "projectName": "OncoTrack",
-      "projectPath": "/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/OncoTrack.csproj",
+      "projectPath": "/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/OncoTrack.csproj",
       "packagesPath": "/Users/mohammedrishinpoolat/.nuget/packages/",
-      "outputPath": "/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/obj/",
+      "outputPath": "/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/mohammedrishinpoolat/.nuget/NuGet/NuGet.Config"

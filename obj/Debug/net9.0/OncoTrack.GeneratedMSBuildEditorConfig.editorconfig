@@ -17,65 +17,65 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = OncoTrack
 build_property.RootNamespace = OncoTrack
-build_property.ProjectDir = /Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/
+build_property.ProjectDir = /Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = /Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack
+build_property.MSBuildProjectDirectory = /Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/Account/Login.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Mb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/Account/Register.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9SZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/Doctor/AddTreatmentUpdate.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/Doctor/AddTreatmentUpdate.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRG9jdG9yL0FkZFRyZWF0bWVudFVwZGF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/Doctor/Index.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/Doctor/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRG9jdG9yL0luZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/Doctor/PatientDetails.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/Doctor/PatientDetails.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRG9jdG9yL1BhdGllbnREZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/Home/Index.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/Home/Privacy.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/Patient/Index.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/Patient/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGF0aWVudC9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/Shared/Error.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/Shared/_ValidationScriptsPartial.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/_ViewImports.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/_ViewStart.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTrack/Views/Shared/_Layout.cshtml]
+[/Users/mohammedrishinpoolat/Projects/personal-projects/dotnet/OncoTracker/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-u0y8jto5t7
