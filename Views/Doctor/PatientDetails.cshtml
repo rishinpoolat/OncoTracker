@@ -36,17 +36,23 @@
         </div>
     </div>
     
-    <div class="mb-3">
-        <a asp-action="AddTreatmentUpdate" asp-route-patientId="@Model.PatientId" class="btn btn-primary">
-            <i class="fas fa-notes-medical"></i> Add Treatment Update
+    <div class="onco-btn-group onco-btn-group-justified mb-4">
+        <a asp-action="AddTreatmentUpdate" asp-route-patientId="@Model.PatientId" class="onco-btn onco-btn-primary">
+            <i class="fas fa-notes-medical"></i>
+            Add Treatment Update
         </a>
-        <a asp-action="AddMedication" asp-route-patientId="@Model.PatientId" class="btn btn-success">
-            <i class="fas fa-pills"></i> Add Medication
+        <a asp-action="AddMedication" asp-route-patientId="@Model.PatientId" class="onco-btn onco-btn-success">
+            <i class="fas fa-pills"></i>
+            Add Medication
         </a>
-        <a asp-action="AddAppointment" asp-route-patientId="@Model.PatientId" class="btn btn-info">
-            <i class="fas fa-calendar-plus"></i> Schedule Appointment
+        <a asp-action="AddAppointment" asp-route-patientId="@Model.PatientId" class="onco-btn onco-btn-info">
+            <i class="fas fa-calendar-plus"></i>
+            Schedule Appointment
         </a>
-        <a asp-action="PatientList" class="btn btn-secondary">Back to List</a>
+        <a asp-action="PatientList" class="onco-btn onco-btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Back to List
+        </a>
     </div>
     
     <div class="row">
@@ -113,10 +119,10 @@
                                             <br/><small class="text-muted">Prescribed by: @med.PrescribedBy</small>
                                         </div>
                                     </div>
-                                    <div class="btn-group-vertical btn-group-sm">
+                                    <div class="d-flex flex-column gap-1">
                                         <a asp-controller="Doctor" asp-action="EditMedication" 
                                            asp-route-id="@med.MedicationId"
-                                           class="btn btn-warning btn-sm">
+                                           class="onco-btn onco-btn-warning onco-btn-sm">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
                                         @if (med.IsActive)
@@ -124,7 +130,7 @@
                                             <form id="deactivateForm_@med.MedicationId" asp-action="DeactivateMedication" method="post" class="d-inline">
                                                 <input type="hidden" name="medicationId" value="@med.MedicationId" />
                                                 <button type="button" 
-                                                        class="btn btn-danger btn-sm w-100" 
+                                                        class="onco-btn onco-btn-danger onco-btn-sm w-100" 
                                                         onclick="DialogUtil.showConfirm('Are you sure you want to deactivate this medication?', function() { document.getElementById('deactivateForm_@med.MedicationId').submit(); })">
                                                     <i class="fas fa-stop"></i> Stop
                                                 </button>

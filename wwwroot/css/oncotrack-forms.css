@@ -1,0 +1,553 @@
+/* OncoTracker Form & Button Styling */
+
+/* ===== FORM STYLING ===== */
+.onco-form {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 2rem;
+    border: 1px solid #e9ecef;
+    margin-bottom: 2rem;
+}
+
+.onco-form-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.onco-form-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.onco-form-subtitle {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Form Groups */
+.onco-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.onco-form-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Labels */
+.onco-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-size: 0.9rem;
+}
+
+.onco-label.required::after {
+    content: " *";
+    color: #dc3545;
+}
+
+/* Input Fields */
+.onco-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
+
+.onco-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+    outline: none;
+    background-color: #fff;
+}
+
+.onco-input:hover {
+    border-color: #adb5bd;
+}
+
+.onco-input.is-invalid {
+    border-color: #dc3545;
+}
+
+.onco-input.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
+}
+
+/* Select Dropdown */
+.onco-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.onco-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+    outline: none;
+}
+
+.onco-select:hover {
+    border-color: #adb5bd;
+}
+
+/* Textarea */
+.onco-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+}
+
+.onco-textarea:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+    outline: none;
+}
+
+.onco-textarea:hover {
+    border-color: #adb5bd;
+}
+
+/* Checkbox & Radio */
+.onco-checkbox,
+.onco-radio {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+}
+
+.onco-checkbox input,
+.onco-radio input {
+    position: absolute;
+    opacity: 0;
+}
+
+.onco-checkbox .checkmark,
+.onco-radio .checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: #fff;
+    border: 2px solid #e9ecef;
+    border-radius: 4px;
+    margin-right: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.onco-radio .checkmark {
+    border-radius: 50%;
+}
+
+.onco-checkbox input:checked ~ .checkmark,
+.onco-radio input:checked ~ .checkmark {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+.onco-checkbox .checkmark:after,
+.onco-radio .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.onco-checkbox input:checked ~ .checkmark:after {
+    display: block;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.onco-radio input:checked ~ .checkmark:after {
+    display: block;
+    top: 4px;
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+
+/* Form Validation */
+.onco-validation-summary {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    color: #721c24;
+}
+
+.onco-validation-summary ul {
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+.text-danger.field-validation-error {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+    color: #dc3545;
+}
+
+/* ===== BUTTON STYLING ===== */
+.onco-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    line-height: 1.4;
+    gap: 0.5rem;
+}
+
+.onco-btn:hover {
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.onco-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.onco-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Button Variants */
+.onco-btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.onco-btn-primary:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    color: white;
+}
+
+.onco-btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.onco-btn-secondary:hover {
+    background-color: #545b62;
+    color: white;
+}
+
+.onco-btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.onco-btn-success:hover {
+    background-color: #218838;
+    color: white;
+}
+
+.onco-btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.onco-btn-danger:hover {
+    background-color: #c82333;
+    color: white;
+}
+
+.onco-btn-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.onco-btn-warning:hover {
+    background-color: #e0a800;
+    color: #212529;
+}
+
+.onco-btn-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.onco-btn-info:hover {
+    background-color: #138496;
+    color: white;
+}
+
+.onco-btn-light {
+    background-color: #f8f9fa;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+.onco-btn-light:hover {
+    background-color: #e2e6ea;
+    color: #495057;
+}
+
+/* Outline Button Variants */
+.onco-btn-outline-primary {
+    background-color: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.onco-btn-outline-primary:hover {
+    background-color: #667eea;
+    color: white;
+}
+
+.onco-btn-outline-secondary {
+    background-color: transparent;
+    color: #6c757d;
+    border: 2px solid #6c757d;
+}
+
+.onco-btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+.onco-btn-outline-success {
+    background-color: transparent;
+    color: #28a745;
+    border: 2px solid #28a745;
+}
+
+.onco-btn-outline-success:hover {
+    background-color: #28a745;
+    color: white;
+}
+
+.onco-btn-outline-danger {
+    background-color: transparent;
+    color: #dc3545;
+    border: 2px solid #dc3545;
+}
+
+.onco-btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+.onco-btn-outline-warning {
+    background-color: transparent;
+    color: #ffc107;
+    border: 2px solid #ffc107;
+}
+
+.onco-btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.onco-btn-outline-info {
+    background-color: transparent;
+    color: #17a2b8;
+    border: 2px solid #17a2b8;
+}
+
+.onco-btn-outline-info:hover {
+    background-color: #17a2b8;
+    color: white;
+}
+
+/* Button Sizes */
+.onco-btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    min-width: 80px;
+    border-radius: 6px;
+}
+
+.onco-btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    min-width: 160px;
+    border-radius: 10px;
+}
+
+/* Button Groups */
+.onco-btn-group {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.onco-btn-group-justified {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.onco-btn-group-justified .onco-btn {
+    flex: 1;
+}
+
+/* Form Button Row */
+.onco-form-actions {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.onco-form-actions-center {
+    justify-content: center;
+}
+
+.onco-form-actions-between {
+    justify-content: space-between;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .onco-form {
+        padding: 1.5rem;
+    }
+    
+    .onco-form-actions {
+        flex-direction: column;
+    }
+    
+    .onco-btn {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .onco-btn-group {
+        flex-direction: column;
+    }
+    
+    .onco-btn-group-justified {
+        flex-direction: column;
+    }
+}
+
+/* Focus States for Accessibility */
+.onco-btn:focus,
+.onco-input:focus,
+.onco-select:focus,
+.onco-textarea:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+/* Loading State */
+.onco-btn.loading {
+    position: relative;
+    color: transparent;
+}
+
+.onco-btn.loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Input Icons */
+.onco-input-group {
+    position: relative;
+}
+
+.onco-input-group .onco-input {
+    padding-left: 2.5rem;
+}
+
+.onco-input-group .input-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 1rem;
+    z-index: 2;
+}
+
+/* Two Column Layout */
+.onco-form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.onco-form-col {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .onco-form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .onco-form-col {
+        margin-bottom: 1.5rem;
+    }
+    
+    .onco-form-col:last-child {
+        margin-bottom: 0;
+    }
+}

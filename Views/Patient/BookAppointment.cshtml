@@ -1,127 +1,197 @@
 @model OncoTrack.ViewModels.BookAppointmentViewModel
 
 @{
-    ViewData["Title"] = "Book Appointment";
+    ViewData["Title"] = ViewBag.IsEdit == true ? "Edit Appointment - OncoTracker" : "Book Appointment - OncoTracker";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-calendar-plus mr-2"></i>
-                        @if (ViewBag.IsEdit == true)
-                        {
-                            <text>Edit Appointment with @Model.DoctorName</text>
-                        }
-                        else
-                        {
-                            <text>Book Appointment with @Model.DoctorName</text>
-                        }
-                    </h3>
+<div class="row justify-content-center" style="margin-top: 2rem;">
+    <div class="col-md-8 col-lg-6">
+        <div class="onco-form">
+            <!-- Form Header -->
+            <div class="onco-form-header text-center">
+                <div class="mb-3">
+                    @if (ViewBag.IsEdit == true)
+                    {
+                        <i class="fas fa-edit text-warning" style="font-size: 2.5rem;"></i>
+                    }
+                    else
+                    {
+                        <i class="fas fa-calendar-plus text-primary" style="font-size: 2.5rem;"></i>
+                    }
                 </div>
-                <div class="card-body">
+                <h2 class="onco-form-title">
+                    @if (ViewBag.IsEdit == true)
+                    {
+                        <text>Edit Appointment</text>
+                    }
+                    else
+                    {
+                        <text>Book Appointment</text>
+                    }
+                </h2>
+                <p class="onco-form-subtitle">
+                    @if (ViewBag.IsEdit == true)
+                    {
+                        <text>Update your appointment with @Model.DoctorName</text>
+                    }
+                    else
+                    {
+                        <text>Schedule a consultation with @Model.DoctorName</text>
+                    }
+                </p>
+            </div>
 
-                    <form asp-action="@(ViewBag.IsEdit == true ? "UpdateAppointmentRequest" : "BookAppointment")" method="post">
-                        @if (ViewBag.IsEdit == true)
-                        {
-                            <input type="hidden" name="originalAppointmentId" value="@ViewBag.OriginalAppointmentId" />
-                        }
-                        <input type="hidden" asp-for="DoctorId" />
-                        <input type="hidden" asp-for="DoctorName" />
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="AppointmentDate" class="form-label"></label>
+            <!-- Validation Summary -->
+            <div asp-validation-summary="ModelOnly" class="onco-validation-summary" style="display: none;"></div>
+
+            <!-- Booking Form -->
+            <form asp-action="@(ViewBag.IsEdit == true ? "UpdateAppointmentRequest" : "BookAppointment")" method="post" novalidate>
+                @if (ViewBag.IsEdit == true)
+                {
+                    <input type="hidden" name="originalAppointmentId" value="@ViewBag.OriginalAppointmentId" />
+                }
+                <input type="hidden" asp-for="DoctorId" />
+                <input type="hidden" asp-for="DoctorName" />
+
+                <!-- Date and Time Section -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="fas fa-calendar-alt me-2"></i>When would you like to meet?
+                    </h5>
+                    
+                    <div class="onco-form-row">
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="AppointmentDate" class="onco-label required">Appointment Date</label>
+                                <div class="onco-input-group">
+                                    <i class="fas fa-calendar input-icon"></i>
                                     <input asp-for="AppointmentDate" 
-                                           class="form-control" 
+                                           class="onco-input" 
                                            type="date" 
                                            min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
-                                    <span asp-validation-for="AppointmentDate" class="text-danger"></span>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="AppointmentTime" class="form-label"></label>
-                                    <select asp-for="AppointmentTime" class="form-control">
-                                        <option value="">Select Time</option>
-                                        @foreach (var timeSlot in Model.AvailableTimeSlots)
-                                        {
-                                            <option value="@timeSlot.ToString(@"hh\:mm")">
-                                                @timeSlot.ToString(@"hh\:mm") @(timeSlot.Hours >= 12 ? "PM" : "AM")
-                                            </option>
-                                        }
-                                    </select>
-                                    <span asp-validation-for="AppointmentTime" class="text-danger"></span>
-                                </div>
+                                <span asp-validation-for="AppointmentDate" class="text-danger field-validation-error"></span>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label asp-for="AppointmentType" class="form-label"></label>
-                            <select asp-for="AppointmentType" class="form-control">
-                                <option value="">Select Type</option>
-                                @foreach (var type in Model.AppointmentTypes)
-                                {
-                                    <option value="@type">@type</option>
-                                }
-                            </select>
-                            <span asp-validation-for="AppointmentType" class="text-danger"></span>
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="AppointmentTime" class="onco-label required">Appointment Time</label>
+                                <select asp-for="AppointmentTime" class="onco-select">
+                                    <option value="">Select preferred time</option>
+                                    @foreach (var timeSlot in Model.AvailableTimeSlots)
+                                    {
+                                        <option value="@timeSlot.ToString(@"hh\:mm")">
+                                            @timeSlot.ToString(@"hh\:mm") @(timeSlot.Hours >= 12 ? "PM" : "AM")
+                                        </option>
+                                    }
+                                </select>
+                                <span asp-validation-for="AppointmentTime" class="text-danger field-validation-error"></span>
+                            </div>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="form-group">
-                            <label asp-for="Notes" class="form-label"></label>
+                <!-- Appointment Details Section -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="fas fa-stethoscope me-2"></i>Appointment Details
+                    </h5>
+                    
+                    <div class="onco-form-group">
+                        <label asp-for="AppointmentType" class="onco-label required">Type of Visit</label>
+                        <select asp-for="AppointmentType" class="onco-select">
+                            <option value="">Select appointment type</option>
+                            @foreach (var type in Model.AppointmentTypes)
+                            {
+                                <option value="@type">@type</option>
+                            }
+                        </select>
+                        <span asp-validation-for="AppointmentType" class="text-danger field-validation-error"></span>
+                    </div>
+
+                    <div class="onco-form-group">
+                        <label asp-for="Notes" class="onco-label">Additional Notes</label>
+                        <div class="onco-input-group">
+                            <i class="fas fa-notes-medical input-icon" style="align-self: flex-start; margin-top: 0.75rem;"></i>
                             <textarea asp-for="Notes" 
-                                      class="form-control" 
+                                      class="onco-textarea" 
                                       rows="4" 
-                                      placeholder="Please describe your symptoms or reason for the appointment..."></textarea>
-                            <span asp-validation-for="Notes" class="text-danger"></span>
+                                      placeholder="Please describe your symptoms, concerns, or the reason for this appointment..."
+                                      style="padding-left: 2.5rem;"></textarea>
                         </div>
+                        <span asp-validation-for="Notes" class="text-danger field-validation-error"></span>
+                        <small class="text-muted">Optional: Help your doctor prepare for your visit</small>
+                    </div>
+                </div>
 
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle mr-2"></i>
-                            <strong>Note:</strong> Doctor consultation hours are from 10:00 AM to 6:00 PM. 
-                            @if (ViewBag.IsEdit == true)
-                            {
-                                <text>Editing an appointment will update your existing appointment and set it as pending for doctor approval.</text>
-                            }
-                            else
-                            {
-                                <text>Your appointment request will be reviewed by your doctor and you'll be notified of the status.</text>
-                            }
+                <!-- Information Notice -->
+                <div class="alert alert-info border-0 rounded-lg mb-4" style="background-color: rgba(13, 202, 240, 0.1); border-left: 4px solid #0dcaf0 !important;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="fas fa-info-circle text-info" style="font-size: 1.2rem; margin-top: 0.1rem;"></i>
                         </div>
-
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <button type="submit" class="btn btn-primary btn-block">
-                                    <i class="fas fa-paper-plane mr-2"></i>
+                        <div>
+                            <h6 class="alert-heading text-info mb-2">Important Information</h6>
+                            <ul class="mb-0 small">
+                                <li><strong>Consultation Hours:</strong> 10:00 AM to 6:00 PM (Monday - Friday)</li>
+                                <li>
                                     @if (ViewBag.IsEdit == true)
                                     {
-                                        <text>Update Request</text>
+                                        <strong>Update Notice:</strong> <text>Your changes will be reviewed by @Model.DoctorName for approval.</text>
                                     }
                                     else
                                     {
-                                        <text>Submit Request</text>
+                                        <strong>Approval Process:</strong> <text>@Model.DoctorName will review and approve your appointment request.</text>
                                     }
-                                </button>
-                            </div>
-                            <div class="col-md-6">
-                                <a asp-action="Appointments" class="btn btn-secondary btn-block">
-                                    <i class="fas fa-arrow-left mr-2"></i>
-                                    Back to Appointments
-                                </a>
-                            </div>
+                                </li>
+                                <li><strong>Notification:</strong> You'll receive updates via email about your appointment status.</li>
+                            </ul>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+
+                <!-- Form Actions -->
+                <div class="onco-form-actions onco-form-actions-between">
+                    <a asp-action="Appointments" class="onco-btn onco-btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Appointments
+                    </a>
+                    <button type="submit" class="onco-btn onco-btn-primary onco-btn-lg">
+                        @if (ViewBag.IsEdit == true)
+                        {
+                            <i class="fas fa-save"></i>
+                            <text>Update Request</text>
+                        }
+                        else
+                        {
+                            <i class="fas fa-paper-plane"></i>
+                            <text>Submit Request</text>
+                        }
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Additional Help -->
+        <div class="text-center mt-4">
+            <small class="text-muted">
+                <i class="fas fa-phone-alt me-1"></i>
+                Need help? Contact our support team or call your doctor's office directly
+            </small>
         </div>
     </div>
 </div>
+
+<style>
+    .input-icon {
+        color: #667eea !important;
+    }
+    
+    .alert-info {
+        background-color: rgba(13, 202, 240, 0.1) !important;
+        border: 1px solid rgba(13, 202, 240, 0.2) !important;
+    }
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

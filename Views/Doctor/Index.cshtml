@@ -92,22 +92,22 @@
                 </h5>
                 <div class="row">
                     <div class="col-md-3 mb-2">
-                        <a href="@Url.Action("MyAppointments", "Doctor")" class="btn btn-primary w-100 btn-action">
+                        <a href="@Url.Action("MyAppointments", "Doctor")" class="onco-btn onco-btn-primary w-100 btn-action">
                             <i class="fas fa-calendar me-2"></i>My Appointments
                         </a>
                     </div>
                     <div class="col-md-3 mb-2">
-                        <a href="@Url.Action("AppointmentRequests", "Doctor")" class="btn btn-outline-warning w-100 btn-action">
+                        <a href="@Url.Action("AppointmentRequests", "Doctor")" class="onco-btn onco-btn-outline-warning w-100 btn-action">
                             <i class="fas fa-clock me-2"></i>Pending Requests
                         </a>
                     </div>
                     <div class="col-md-3 mb-2">
-                        <a href="@Url.Action("PatientList", "Doctor")" class="btn btn-outline-primary w-100 btn-action">
+                        <a href="@Url.Action("PatientList", "Doctor")" class="onco-btn onco-btn-outline-primary w-100 btn-action">
                             <i class="fas fa-users me-2"></i>All Patients
                         </a>
                     </div>
                     <div class="col-md-3 mb-2">
-                        <a href="@Url.Action("AssignPatient", "Doctor")" class="btn btn-outline-success w-100 btn-action">
+                        <a href="@Url.Action("AssignPatient", "Doctor")" class="onco-btn onco-btn-outline-success w-100 btn-action">
                             <i class="fas fa-user-plus me-2"></i>Assign Patient
                         </a>
                     </div>
@@ -126,10 +126,10 @@
                             <i class="fas fa-users text-primary me-2"></i>My Patients
                         </h5>
                         <div class="header-actions">
-                            <a asp-action="PatientList" class="btn btn-primary btn-sm me-2">
+                            <a asp-action="PatientList" class="onco-btn onco-btn-primary onco-btn-sm me-2">
                                 <i class="fas fa-eye me-1"></i>View All (@Model.TotalPatients)
                             </a>
-                            <a asp-action="AssignPatient" class="btn btn-success btn-sm">
+                            <a asp-action="AssignPatient" class="onco-btn onco-btn-success onco-btn-sm">
                                 <i class="fas fa-plus me-1"></i>Assign New
                             </a>
                         </div>
@@ -164,15 +164,15 @@
                                         <div class="col-md-5 text-end">
                                             <div class="patient-actions">
                                                 <a asp-action="PatientDetails" asp-route-id="@patient.PatientId" 
-                                                   class="btn btn-outline-primary btn-sm me-1">
+                                                   class="onco-btn onco-btn-outline-primary onco-btn-sm me-1">
                                                     <i class="fas fa-user me-1"></i>Details
                                                 </a>
                                                 <a asp-action="AddTreatmentUpdate" asp-route-patientId="@patient.PatientId" 
-                                                   class="btn btn-success btn-sm me-1">
+                                                   class="onco-btn onco-btn-success onco-btn-sm me-1">
                                                     <i class="fas fa-notes-medical me-1"></i>Add Update
                                                 </a>
                                                 <a asp-action="AddMedication" asp-route-patientId="@patient.PatientId" 
-                                                   class="btn btn-outline-success btn-sm">
+                                                   class="onco-btn onco-btn-outline-success onco-btn-sm">
                                                     <i class="fas fa-pills me-1"></i>Medication
                                                 </a>
                                             </div>
@@ -185,7 +185,7 @@
                         @if (Model.Patients.Count > 6)
                         {
                             <div class="text-center mt-4">
-                                <a asp-action="PatientList" class="btn btn-outline-primary">
+                                <a asp-action="PatientList" class="onco-btn onco-btn-outline-primary">
                                     <i class="fas fa-eye me-2"></i>View All @Model.TotalPatients Patients
                                 </a>
                             </div>
@@ -197,7 +197,7 @@
                             <i class="fas fa-user-plus text-muted mb-3" style="font-size: 3rem;"></i>
                             <h5 class="text-muted mb-3">No patients assigned yet</h5>
                             <p class="text-muted mb-4">Start building your patient roster by assigning patients to your care.</p>
-                            <a asp-action="AssignPatient" class="btn btn-primary">
+                            <a asp-action="AssignPatient" class="onco-btn onco-btn-primary">
                                 <i class="fas fa-user-plus me-2"></i>Assign Your First Patient
                             </a>
                         </div>

@@ -1,130 +1,216 @@
 @model OncoTrack.ViewModels.AddMedicationViewModel
 @{
-    ViewData["Title"] = ViewBag.IsEdit == true ? "Edit Medication" : "Add Medication";
+    ViewData["Title"] = ViewBag.IsEdit == true ? "Edit Medication - OncoTracker" : "Add Medication - OncoTracker";
 }
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h4>@(ViewBag.IsEdit == true ? "Edit Medication" : "Add New Medication")</h4>
-                    <p class="text-muted mb-0">@(ViewBag.IsEdit == true ? "Update medication details for" : "Prescribe a new medication for") <strong>@ViewBag.PatientName</strong></p>
+<div class="row justify-content-center" style="margin-top: 2rem;">
+    <div class="col-md-9 col-lg-7">
+        <div class="onco-form">
+            <!-- Form Header -->
+            <div class="onco-form-header text-center">
+                <div class="mb-3">
+                    @if (ViewBag.IsEdit == true)
+                    {
+                        <i class="fas fa-edit text-warning" style="font-size: 2.5rem;"></i>
+                    }
+                    else
+                    {
+                        <i class="fas fa-pills text-success" style="font-size: 2.5rem;"></i>
+                    }
                 </div>
-                <div class="card-body">
-                    <form asp-action="@(ViewBag.IsEdit == true ? "UpdateMedication" : "AddMedication")" method="post">
-                        @if (ViewBag.IsEdit == true)
-                        {
-                            <input type="hidden" name="medicationId" value="@ViewBag.MedicationId" />
-                        }
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                        
-                        <input type="hidden" asp-for="PatientId" />
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="MedicationName" class="form-label"></label>
-                                    <input asp-for="MedicationName" class="form-control" placeholder="e.g., Chemotherapy, Tamoxifen, etc." />
-                                    <span asp-validation-for="MedicationName" class="text-danger"></span>
+                <h2 class="onco-form-title">
+                    @(ViewBag.IsEdit == true ? "Edit Medication" : "Prescribe Medication")
+                </h2>
+                <p class="onco-form-subtitle">
+                    @(ViewBag.IsEdit == true ? "Update medication details for" : "Add new medication for") 
+                    <strong>@ViewBag.PatientName</strong>
+                </p>
+            </div>
+
+            <!-- Validation Summary -->
+            <div asp-validation-summary="ModelOnly" class="onco-validation-summary" style="display: none;"></div>
+
+            <!-- Medication Form -->
+            <form asp-action="@(ViewBag.IsEdit == true ? "UpdateMedication" : "AddMedication")" method="post" novalidate>
+                @if (ViewBag.IsEdit == true)
+                {
+                    <input type="hidden" name="medicationId" value="@ViewBag.MedicationId" />
+                }
+                <input type="hidden" asp-for="PatientId" />
+
+                <!-- Medication Details Section -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="fas fa-capsules me-2"></i>Medication Information
+                    </h5>
+                    
+                    <div class="onco-form-row">
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="MedicationName" class="onco-label required">Medication Name</label>
+                                <div class="onco-input-group">
+                                    <i class="fas fa-pills input-icon"></i>
+                                    <input asp-for="MedicationName" class="onco-input" placeholder="e.g. Tamoxifen, Chemotherapy" />
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="Dosage" class="form-label"></label>
-                                    <input asp-for="Dosage" class="form-control" placeholder="e.g., 20mg, 500ml, etc." />
-                                    <span asp-validation-for="Dosage" class="text-danger"></span>
-                                </div>
+                                <span asp-validation-for="MedicationName" class="text-danger field-validation-error"></span>
                             </div>
                         </div>
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="Dosage" class="onco-label required">Dosage</label>
+                                <div class="onco-input-group">
+                                    <i class="fas fa-balance-scale input-icon"></i>
+                                    <input asp-for="Dosage" class="onco-input" placeholder="e.g. 20mg, 500ml, 1 tablet" />
+                                </div>
+                                <span asp-validation-for="Dosage" class="text-danger field-validation-error"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="Frequency" class="form-label"></label>
-                                    <select asp-for="Frequency" class="form-select">
-                                        <option value="">Select frequency...</option>
+                <!-- Administration Details Section -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="fas fa-clock me-2"></i>Administration Schedule
+                    </h5>
+                    
+                    <div class="onco-form-row">
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="Frequency" class="onco-label required">Frequency</label>
+                                <select asp-for="Frequency" class="onco-select">
+                                    <option value="">Select how often to take</option>
+                                    <optgroup label="Daily Schedule">
                                         <option value="Once daily">Once daily</option>
-                                        <option value="Twice daily">Twice daily</option>
-                                        <option value="Three times daily">Three times daily</option>
-                                        <option value="Four times daily">Four times daily</option>
+                                        <option value="Twice daily">Twice daily (2x/day)</option>
+                                        <option value="Three times daily">Three times daily (3x/day)</option>
+                                        <option value="Four times daily">Four times daily (4x/day)</option>
+                                    </optgroup>
+                                    <optgroup label="Hourly Schedule">
                                         <option value="Every 4 hours">Every 4 hours</option>
                                         <option value="Every 6 hours">Every 6 hours</option>
                                         <option value="Every 8 hours">Every 8 hours</option>
                                         <option value="Every 12 hours">Every 12 hours</option>
+                                    </optgroup>
+                                    <optgroup label="Weekly/Monthly">
                                         <option value="Weekly">Weekly</option>
                                         <option value="Monthly">Monthly</option>
-                                        <option value="As needed">As needed</option>
+                                    </optgroup>
+                                    <optgroup label="Conditional">
+                                        <option value="As needed">As needed (PRN)</option>
                                         <option value="Before meals">Before meals</option>
                                         <option value="After meals">After meals</option>
                                         <option value="At bedtime">At bedtime</option>
-                                    </select>
-                                    <span asp-validation-for="Frequency" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="StartDate" class="form-label"></label>
-                                    <input asp-for="StartDate" class="form-control" type="date" />
-                                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                                </div>
+                                    </optgroup>
+                                </select>
+                                <span asp-validation-for="Frequency" class="text-danger field-validation-error"></span>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="EndDate" class="form-label"></label>
-                                    <input asp-for="EndDate" class="form-control" type="date" />
-                                    <span asp-validation-for="EndDate" class="text-danger"></span>
-                                    <div class="form-text">Leave blank for ongoing medication</div>
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="StartDate" class="onco-label required">Start Date</label>
+                                <div class="onco-input-group">
+                                    <i class="fas fa-calendar-alt input-icon"></i>
+                                    <input asp-for="StartDate" class="onco-input" type="date" />
                                 </div>
+                                <span asp-validation-for="StartDate" class="text-danger field-validation-error"></span>
                             </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="SideEffects" class="form-label"></label>
-                            <textarea asp-for="SideEffects" class="form-control" rows="3" 
-                                      placeholder="List any potential side effects or warnings for the patient..."></textarea>
-                            <span asp-validation-for="SideEffects" class="text-danger"></span>
-                        </div>
-
-                        <hr />
-
-                        <div class="d-flex justify-content-between">
-                            <a asp-action="PatientDetails" asp-route-id="@Model.PatientId" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Back to Patient
-                            </a>
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-pills"></i> Add Medication
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h5>Quick Actions</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <a asp-action="AddTreatmentUpdate" asp-route-patientId="@Model.PatientId" class="btn btn-outline-primary w-100 mb-2">
-                                <i class="fas fa-notes-medical"></i> Add Treatment Update
-                            </a>
-                        </div>
-                        <div class="col-md-6">
-                            <a asp-action="AddAppointment" asp-route-patientId="@Model.PatientId" class="btn btn-outline-info w-100 mb-2">
-                                <i class="fas fa-calendar-plus"></i> Schedule Appointment
-                            </a>
                         </div>
                     </div>
+
+                    <div class="onco-form-group">
+                        <label asp-for="EndDate" class="onco-label">End Date (Optional)</label>
+                        <div class="onco-input-group">
+                            <i class="fas fa-calendar-check input-icon"></i>
+                            <input asp-for="EndDate" class="onco-input" type="date" />
+                        </div>
+                        <span asp-validation-for="EndDate" class="text-danger field-validation-error"></span>
+                        <small class="text-muted">Leave blank for ongoing/indefinite medication</small>
+                    </div>
                 </div>
+
+                <!-- Safety Information Section -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Safety & Side Effects
+                    </h5>
+                    
+                    <div class="onco-form-group">
+                        <label asp-for="SideEffects" class="onco-label">Potential Side Effects & Warnings</label>
+                        <div class="onco-input-group">
+                            <i class="fas fa-shield-alt input-icon" style="align-self: flex-start; margin-top: 0.75rem;"></i>
+                            <textarea asp-for="SideEffects" 
+                                      class="onco-textarea" 
+                                      rows="4" 
+                                      placeholder="List any potential side effects, drug interactions, or important warnings for the patient..."
+                                      style="padding-left: 2.5rem;"></textarea>
+                        </div>
+                        <span asp-validation-for="SideEffects" class="text-danger field-validation-error"></span>
+                        <small class="text-muted">This information will be shared with the patient</small>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="onco-form-actions onco-form-actions-between">
+                    <a asp-action="PatientDetails" asp-route-id="@Model.PatientId" class="onco-btn onco-btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Patient
+                    </a>
+                    <button type="submit" class="onco-btn onco-btn-success onco-btn-lg">
+                        @if (ViewBag.IsEdit == true)
+                        {
+                            <i class="fas fa-save"></i>
+                            <text>Update Medication</text>
+                        }
+                        else
+                        {
+                            <i class="fas fa-pills"></i>
+                            <text>Prescribe Medication</text>
+                        }
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="onco-form mt-4">
+            <div class="onco-form-header">
+                <h5 class="onco-form-title">
+                    <i class="fas fa-bolt text-warning me-2"></i>Quick Actions
+                </h5>
+                <p class="onco-form-subtitle">Additional actions for @ViewBag.PatientName</p>
+            </div>
+            
+            <div class="onco-btn-group onco-btn-group-justified">
+                <a asp-action="AddTreatmentUpdate" asp-route-patientId="@Model.PatientId" class="onco-btn onco-btn-outline-primary">
+                    <i class="fas fa-notes-medical"></i>
+                    Add Treatment Update
+                </a>
+                <a asp-action="AddAppointment" asp-route-patientId="@Model.PatientId" class="onco-btn onco-btn-outline-info">
+                    <i class="fas fa-calendar-plus"></i>
+                    Schedule Appointment
+                </a>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .input-icon {
+        color: #667eea !important;
+    }
+    
+    .onco-select optgroup {
+        font-weight: 600;
+        color: #495057;
+        background-color: #f8f9fa;
+    }
+    
+    .onco-select option {
+        font-weight: normal;
+        padding: 0.5rem;
+    }
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

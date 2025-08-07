@@ -92,22 +92,22 @@
                 </h5>
                 <div class="row">
                     <div class="col-md-3 mb-2">
-                        <a href="@Url.Action("BookAppointment", "Patient")" class="btn btn-primary w-100 btn-action">
+                        <a href="@Url.Action("BookAppointment", "Patient")" class="onco-btn onco-btn-primary w-100 btn-action">
                             <i class="fas fa-calendar-plus me-2"></i>Book Appointment
                         </a>
                     </div>
                     <div class="col-md-3 mb-2">
-                        <a href="@Url.Action("Appointments", "Patient")" class="btn btn-outline-primary w-100 btn-action">
+                        <a href="@Url.Action("Appointments", "Patient")" class="onco-btn onco-btn-outline-primary w-100 btn-action">
                             <i class="fas fa-calendar me-2"></i>My Appointments
                         </a>
                     </div>
                     <div class="col-md-3 mb-2">
-                        <a href="@Url.Action("Medications", "Patient")" class="btn btn-outline-success w-100 btn-action">
+                        <a href="@Url.Action("Medications", "Patient")" class="onco-btn onco-btn-outline-success w-100 btn-action">
                             <i class="fas fa-pills me-2"></i>Medications
                         </a>
                     </div>
                     <div class="col-md-3 mb-2">
-                        <a href="@Url.Action("TreatmentHistory", "Patient")" class="btn btn-outline-info w-100 btn-action">
+                        <a href="@Url.Action("TreatmentHistory", "Patient")" class="onco-btn onco-btn-outline-info w-100 btn-action">
                             <i class="fas fa-history me-2"></i>Treatment History
                         </a>
                     </div>
@@ -157,7 +157,7 @@
                         </div>
                     }
                     <div class="text-center mt-3">
-                        <a asp-action="TreatmentHistory" class="btn btn-outline-info">
+                        <a asp-action="TreatmentHistory" class="onco-btn onco-btn-outline-info">
                             <i class="fas fa-eye me-2"></i>View All Updates
                         </a>
                     </div>
@@ -206,7 +206,7 @@
                         </div>
                     }
                     <div class="text-center mt-3">
-                        <a asp-action="Medications" class="btn btn-outline-success">
+                        <a asp-action="Medications" class="onco-btn onco-btn-outline-success">
                             <i class="fas fa-eye me-2"></i>View All Medications
                         </a>
                     </div>
@@ -224,7 +224,7 @@
                         <h5 class="fw-bold mb-0">
                             <i class="fas fa-calendar-check text-primary me-2"></i>Upcoming Appointments
                         </h5>
-                        <a asp-action="BookAppointment" class="btn btn-primary btn-sm">
+                        <a asp-action="BookAppointment" class="onco-btn onco-btn-primary onco-btn-sm">
                             <i class="fas fa-plus me-1"></i>Book New
                         </a>
                     </div>
@@ -277,7 +277,7 @@
                             <i class="fas fa-calendar-times text-muted mb-3" style="font-size: 3rem;"></i>
                             <h5 class="text-muted mb-3">No upcoming appointments</h5>
                             <p class="text-muted mb-4">Schedule your next appointment with your doctor.</p>
-                            <a asp-action="BookAppointment" class="btn btn-primary">
+                            <a asp-action="BookAppointment" class="onco-btn onco-btn-primary">
                                 <i class="fas fa-calendar-plus me-2"></i>Book Appointment
                             </a>
                         </div>
@@ -285,7 +285,7 @@
                     @if (Model.UpcomingAppointments?.Count > 3)
                     {
                         <div class="text-center mt-3">
-                            <a asp-action="Appointments" class="btn btn-outline-primary">
+                            <a asp-action="Appointments" class="onco-btn onco-btn-outline-primary">
                                 <i class="fas fa-eye me-2"></i>View All Appointments
                             </a>
                         </div>

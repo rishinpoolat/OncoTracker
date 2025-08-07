@@ -1,49 +1,145 @@
 @model OncoTrack.ViewModels.AddTreatmentUpdateViewModel
 @{
-    ViewData["Title"] = "Add Treatment Update";
+    ViewData["Title"] = "Add Treatment Update - OncoTracker";
 }
 
-<div class="container mt-4">
-    <h2>Add Treatment Update</h2>
-    
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <form asp-action="AddTreatmentUpdate" method="post">
-                        <input type="hidden" asp-for="PatientId" />
-                        
-                        <div class="form-group mb-3">
-                            <label asp-for="UpdateType"></label>
-                            <select asp-for="UpdateType" class="form-control">
-                                <option value="">Select Update Type</option>
-                                <option value="Finding">Finding</option>
-                                <option value="Progress">Progress</option>
-                                <option value="Side Effect">Side Effect</option>
-                                <option value="Lab Result">Lab Result</option>
-                                <option value="Treatment Change">Treatment Change</option>
-                                <option value="General Note">General Note</option>
-                            </select>
-                            <span asp-validation-for="UpdateType" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group mb-3">
-                            <label asp-for="Description"></label>
-                            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group mb-3">
-                            <label asp-for="Notes"></label>
-                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
-                            <span asp-validation-for="Notes" class="text-danger"></span>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary">Add Update</button>
-                        <a asp-action="PatientDetails" asp-route-id="@Model.PatientId" class="btn btn-secondary">Cancel</a>
-                    </form>
+<div class="row justify-content-center" style="margin-top: 2rem;">
+    <div class="col-md-8 col-lg-6">
+        <div class="onco-form">
+            <!-- Form Header -->
+            <div class="onco-form-header text-center">
+                <div class="mb-3">
+                    <i class="fas fa-notes-medical text-primary" style="font-size: 2.5rem;"></i>
                 </div>
+                <h2 class="onco-form-title">Add Treatment Update</h2>
+                <p class="onco-form-subtitle">
+                    Record new treatment information for <strong>@ViewBag.PatientName</strong>
+                </p>
+            </div>
+
+            <!-- Validation Summary -->
+            <div asp-validation-summary="ModelOnly" class="onco-validation-summary" style="display: none;"></div>
+
+            <!-- Treatment Update Form -->
+            <form asp-action="AddTreatmentUpdate" method="post" novalidate>
+                <input type="hidden" asp-for="PatientId" />
+
+                <!-- Update Classification Section -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="fas fa-clipboard-list me-2"></i>Update Classification
+                    </h5>
+                    
+                    <div class="onco-form-group">
+                        <label asp-for="UpdateType" class="onco-label required">Update Type</label>
+                        <select asp-for="UpdateType" class="onco-select">
+                            <option value="">Select the type of update</option>
+                            <optgroup label="Clinical Findings">
+                                <option value="Finding">Clinical Finding</option>
+                                <option value="Lab Result">Laboratory Result</option>
+                                <option value="Progress">Treatment Progress</option>
+                            </optgroup>
+                            <optgroup label="Treatment Changes">
+                                <option value="Treatment Change">Treatment Modification</option>
+                                <option value="Side Effect">Side Effect Report</option>
+                            </optgroup>
+                            <optgroup label="Documentation">
+                                <option value="General Note">General Note</option>
+                            </optgroup>
+                        </select>
+                        <span asp-validation-for="UpdateType" class="text-danger field-validation-error"></span>
+                    </div>
+                </div>
+
+                <!-- Treatment Information Section -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="fas fa-file-medical me-2"></i>Treatment Information
+                    </h5>
+                    
+                    <div class="onco-form-group">
+                        <label asp-for="Description" class="onco-label required">Primary Description</label>
+                        <div class="onco-input-group">
+                            <i class="fas fa-edit input-icon" style="align-self: flex-start; margin-top: 0.75rem;"></i>
+                            <textarea asp-for="Description" 
+                                      class="onco-textarea" 
+                                      rows="4" 
+                                      placeholder="Describe the treatment update, findings, or changes in detail..."
+                                      style="padding-left: 2.5rem;"></textarea>
+                        </div>
+                        <span asp-validation-for="Description" class="text-danger field-validation-error"></span>
+                        <small class="text-muted">Provide detailed information about this treatment update</small>
+                    </div>
+
+                    <div class="onco-form-group">
+                        <label asp-for="Notes" class="onco-label">Additional Notes & Observations</label>
+                        <div class="onco-input-group">
+                            <i class="fas fa-sticky-note input-icon" style="align-self: flex-start; margin-top: 0.75rem;"></i>
+                            <textarea asp-for="Notes" 
+                                      class="onco-textarea" 
+                                      rows="3" 
+                                      placeholder="Add any additional observations, recommendations, or follow-up notes..."
+                                      style="padding-left: 2.5rem;"></textarea>
+                        </div>
+                        <span asp-validation-for="Notes" class="text-danger field-validation-error"></span>
+                        <small class="text-muted">Optional: Include any supplementary information or recommendations</small>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="onco-form-actions onco-form-actions-between">
+                    <a asp-action="PatientDetails" asp-route-id="@Model.PatientId" class="onco-btn onco-btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Patient
+                    </a>
+                    <button type="submit" class="onco-btn onco-btn-primary onco-btn-lg">
+                        <i class="fas fa-plus-circle"></i>
+                        Add Treatment Update
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="onco-form mt-4">
+            <div class="onco-form-header">
+                <h5 class="onco-form-title">
+                    <i class="fas fa-bolt text-warning me-2"></i>Quick Actions
+                </h5>
+                <p class="onco-form-subtitle">Additional actions for @ViewBag.PatientName</p>
+            </div>
+            
+            <div class="onco-btn-group onco-btn-group-justified">
+                <a asp-action="AddMedication" asp-route-patientId="@Model.PatientId" class="onco-btn onco-btn-outline-success">
+                    <i class="fas fa-pills"></i>
+                    Add Medication
+                </a>
+                <a asp-action="AddAppointment" asp-route-patientId="@Model.PatientId" class="onco-btn onco-btn-outline-info">
+                    <i class="fas fa-calendar-plus"></i>
+                    Schedule Appointment
+                </a>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .input-icon {
+        color: #667eea !important;
+    }
+    
+    .onco-select optgroup {
+        font-weight: 600;
+        color: #495057;
+        background-color: #f8f9fa;
+    }
+    
+    .onco-select option {
+        font-weight: normal;
+        padding: 0.5rem;
+    }
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

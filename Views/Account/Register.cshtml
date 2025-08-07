@@ -1,147 +1,251 @@
 @model OncoTrack.ViewModels.RegisterViewModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Register - OncoTracker";
 }
 
-<div class="row justify-content-center mt-3">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4>Register for OncoTrack</h4>
+<div class="row justify-content-center" style="margin-top: 2rem; margin-bottom: 3rem;">
+    <div class="col-md-10 col-lg-8">
+        <div class="onco-form">
+            <!-- Form Header -->
+            <div class="onco-form-header text-center">
+                <div class="mb-3">
+                    <i class="fas fa-user-plus text-primary" style="font-size: 2.5rem;"></i>
+                </div>
+                <h2 class="onco-form-title">Join OncoTracker</h2>
+                <p class="onco-form-subtitle">Create your account to start managing your healthcare journey</p>
             </div>
-            <div class="card-body">
-                <form asp-action="Register" method="post">
-                    <div asp-validation-summary="All" class="text-danger"></div>
+
+            <!-- Validation Summary -->
+            <div asp-validation-summary="All" class="onco-validation-summary" style="display: none;"></div>
+
+            <!-- Registration Form -->
+            <form asp-action="Register" method="post" novalidate>
+                
+                <!-- Basic Information Section -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="fas fa-user me-2"></i>Basic Information
+                    </h5>
                     
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="FirstName"></label>
-                                <input asp-for="FirstName" class="form-control" />
-                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                    <div class="onco-form-row">
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="FirstName" class="onco-label required">First Name</label>
+                                <div class="onco-input-group">
+                                    <i class="fas fa-user input-icon"></i>
+                                    <input asp-for="FirstName" class="onco-input" placeholder="Enter first name" autocomplete="given-name" />
+                                </div>
+                                <span asp-validation-for="FirstName" class="text-danger field-validation-error"></span>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="LastName"></label>
-                                <input asp-for="LastName" class="form-control" />
-                                <span asp-validation-for="LastName" class="text-danger"></span>
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="LastName" class="onco-label required">Last Name</label>
+                                <div class="onco-input-group">
+                                    <i class="fas fa-user input-icon"></i>
+                                    <input asp-for="LastName" class="onco-input" placeholder="Enter last name" autocomplete="family-name" />
+                                </div>
+                                <span asp-validation-for="LastName" class="text-danger field-validation-error"></span>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="form-group mb-3">
-                        <label asp-for="Email"></label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                    <div class="onco-form-group">
+                        <label asp-for="Email" class="onco-label required">Email Address</label>
+                        <div class="onco-input-group">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input asp-for="Email" class="onco-input" type="email" placeholder="Enter email address" autocomplete="email" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger field-validation-error"></span>
                     </div>
                     
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="DateOfBirth"></label>
-                                <input asp-for="DateOfBirth" class="form-control" />
-                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    <div class="onco-form-row">
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="DateOfBirth" class="onco-label required">Date of Birth</label>
+                                <div class="onco-input-group">
+                                    <i class="fas fa-calendar-alt input-icon"></i>
+                                    <input asp-for="DateOfBirth" class="onco-input" type="date" autocomplete="bday" />
+                                </div>
+                                <span asp-validation-for="DateOfBirth" class="text-danger field-validation-error"></span>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="UserType"></label>
-                                <select asp-for="UserType" class="form-control" id="userType">
-                                    <option value="">Select User Type</option>
-                                    <option value="Patient">Patient</option>
-                                    <option value="Doctor">Doctor</option>
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="UserType" class="onco-label required">Account Type</label>
+                                <select asp-for="UserType" class="onco-select" id="userType">
+                                    <option value="">Select your role</option>
+                                    <option value="Patient">Patient - I need medical care</option>
+                                    <option value="Doctor">Doctor - I provide medical care</option>
                                 </select>
-                                <span asp-validation-for="UserType" class="text-danger"></span>
+                                <span asp-validation-for="UserType" class="text-danger field-validation-error"></span>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Patient-specific fields -->
-                    <div id="patientFields" style="display:none;">
-                        <h5 class="mt-3">Patient Information</h5>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label asp-for="CancerType"></label>
-                                    <input asp-for="CancerType" class="form-control" />
+                </div>
+
+                <!-- Patient-specific fields -->
+                <div id="patientFields" style="display:none;" class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="fas fa-heartbeat me-2"></i>Medical Information
+                    </h5>
+                    <div class="onco-form-row">
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="CancerType" class="onco-label">Cancer Type</label>
+                                <div class="onco-input-group">
+                                    <i class="fas fa-microscope input-icon"></i>
+                                    <input asp-for="CancerType" class="onco-input" placeholder="e.g. Breast Cancer" />
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label asp-for="Stage"></label>
-                                    <select asp-for="Stage" class="form-control">
-                                        <option value="">Select Stage</option>
-                                        <option value="Stage I">Stage I</option>
-                                        <option value="Stage II">Stage II</option>
-                                        <option value="Stage III">Stage III</option>
-                                        <option value="Stage IV">Stage IV</option>
-                                    </select>
+                        </div>
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="Stage" class="onco-label">Cancer Stage</label>
+                                <select asp-for="Stage" class="onco-select">
+                                    <option value="">Select stage</option>
+                                    <option value="Stage I">Stage I (Early)</option>
+                                    <option value="Stage II">Stage II (Localized)</option>
+                                    <option value="Stage III">Stage III (Regional)</option>
+                                    <option value="Stage IV">Stage IV (Advanced)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="onco-form-group">
+                        <label asp-for="DiagnosisDate" class="onco-label">Diagnosis Date</label>
+                        <div class="onco-input-group">
+                            <i class="fas fa-calendar-check input-icon"></i>
+                            <input asp-for="DiagnosisDate" class="onco-input" type="date" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Doctor-specific fields -->
+                <div id="doctorFields" style="display:none;" class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="fas fa-stethoscope me-2"></i>Professional Information
+                    </h5>
+                    <div class="onco-form-row">
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="Specialization" class="onco-label">Specialization</label>
+                                <div class="onco-input-group">
+                                    <i class="fas fa-user-md input-icon"></i>
+                                    <input asp-for="Specialization" class="onco-input" placeholder="e.g. Oncology" />
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label asp-for="DiagnosisDate"></label>
-                                    <input asp-for="DiagnosisDate" class="form-control" />
+                        </div>
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="LicenseNumber" class="onco-label">License Number</label>
+                                <div class="onco-input-group">
+                                    <i class="fas fa-id-card input-icon"></i>
+                                    <input asp-for="LicenseNumber" class="onco-input" placeholder="Medical license number" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Doctor-specific fields -->
-                    <div id="doctorFields" style="display:none;">
-                        <h5 class="mt-3">Doctor Information</h5>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label asp-for="Specialization"></label>
-                                    <input asp-for="Specialization" class="form-control" />
+                    <div class="onco-form-group">
+                        <label asp-for="YearsOfExperience" class="onco-label">Years of Experience</label>
+                        <div class="onco-input-group">
+                            <i class="fas fa-award input-icon"></i>
+                            <input asp-for="YearsOfExperience" class="onco-input" type="number" min="0" max="50" placeholder="Years of practice" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="fas fa-address-card me-2"></i>Contact Information
+                    </h5>
+                    <div class="onco-form-group">
+                        <label asp-for="Address" class="onco-label">Address</label>
+                        <div class="onco-input-group">
+                            <i class="fas fa-home input-icon" style="align-self: flex-start; margin-top: 0.75rem;"></i>
+                            <textarea asp-for="Address" class="onco-textarea" rows="3" placeholder="Enter your full address" style="padding-left: 2.5rem;"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Information -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="fas fa-shield-alt me-2"></i>Security
+                    </h5>
+                    <div class="onco-form-row">
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="Password" class="onco-label required">Password</label>
+                                <div class="onco-input-group">
+                                    <i class="fas fa-lock input-icon"></i>
+                                    <input asp-for="Password" class="onco-input" type="password" placeholder="Create password" autocomplete="new-password" />
                                 </div>
+                                <span asp-validation-for="Password" class="text-danger field-validation-error"></span>
+                                <small class="text-muted">Minimum 6 characters, include uppercase and digit</small>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label asp-for="LicenseNumber"></label>
-                                    <input asp-for="LicenseNumber" class="form-control" />
+                        </div>
+                        <div class="onco-form-col">
+                            <div class="onco-form-group">
+                                <label asp-for="ConfirmPassword" class="onco-label required">Confirm Password</label>
+                                <div class="onco-input-group">
+                                    <i class="fas fa-lock input-icon"></i>
+                                    <input asp-for="ConfirmPassword" class="onco-input" type="password" placeholder="Confirm password" autocomplete="new-password" />
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label asp-for="YearsOfExperience"></label>
-                                    <input asp-for="YearsOfExperience" class="form-control" type="number" />
-                                </div>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger field-validation-error"></span>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="form-group mb-3">
-                        <label asp-for="Address"></label>
-                        <textarea asp-for="Address" class="form-control" rows="2"></textarea>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="Password"></label>
-                                <input asp-for="Password" class="form-control" />
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="ConfirmPassword"></label>
-                                <input asp-for="ConfirmPassword" class="form-control" />
-                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">Register</button>
-                    <a asp-action="Login" class="btn btn-link">Already have an account? Login</a>
-                </form>
-            </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="onco-form-actions onco-form-actions-between">
+                    <a asp-action="Login" class="onco-btn onco-btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Login
+                    </a>
+                    <button type="submit" class="onco-btn onco-btn-primary onco-btn-lg">
+                        <i class="fas fa-user-plus"></i>
+                        Create Account
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="text-center mt-4">
+            <small class="text-muted">
+                <i class="fas fa-shield-alt me-1"></i>
+                By registering, you agree to our Terms of Service and Privacy Policy
+            </small>
         </div>
     </div>
 </div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+    
+    .input-icon {
+        color: #667eea !important;
+    }
+    
+    .onco-form {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    #patientFields, #doctorFields {
+        background: rgba(102, 126, 234, 0.05);
+        border-radius: 8px;
+        padding: 1.5rem;
+        border: 1px solid rgba(102, 126, 234, 0.1);
+    }
+</style>
 
 <script>
     document.getElementById('userType').addEventListener('change', function() {
